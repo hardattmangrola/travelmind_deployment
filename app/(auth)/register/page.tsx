@@ -110,7 +110,7 @@ export default function RegisterPage() {
         <div className="relative flex h-full flex-col justify-between px-12 py-10 text-white">
           <motion.div
             className="space-y-6"
-            variants={logoVariants}
+            variants={logoVariants as any}
             initial="hidden"
             animate="visible"
           >
@@ -154,7 +154,7 @@ export default function RegisterPage() {
       {/* Right auth panel */}
       <motion.div
         className="flex w-full items-center justify-center bg-white px-6 py-8 md:w-[45%] md:px-10 lg:px-14"
-        variants={rightPanelVariants}
+        variants={rightPanelVariants as any}
         initial="hidden"
         animate="visible"
       >

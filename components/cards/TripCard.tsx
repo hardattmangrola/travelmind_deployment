@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { CalendarDays, Users } from "lucide-react";
 import type { Itinerary } from "@/types";
 import { cn, formatDate } from "@/lib/utils";
@@ -46,7 +47,10 @@ export function TripCard({ trip }: TripCardProps) {
   const progress = trip.status === "active" ? computeProgress(trip) : 0;
 
   return (
-    <div className="flex w-72 shrink-0 cursor-pointer flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-100">
+    <Link 
+      href={`/itinerary/${trip.id}/view`}
+      className="block flex w-72 shrink-0 cursor-pointer flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-100"
+    >
       <div className="relative h-40">
         <Image
           src={trip.coverImage}
@@ -140,14 +144,13 @@ export function TripCard({ trip }: TripCardProps) {
           </div>
         )}
 
-        <button
-          type="button"
-          className="mt-3 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm font-medium text-slate-900 transition hover:border-indigo-300 hover:bg-indigo-50"
+        <div
+          className="mt-3 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm font-medium text-slate-900 transition hover:border-indigo-300 hover:bg-indigo-50 text-center block"
         >
           View Trip
-        </button>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

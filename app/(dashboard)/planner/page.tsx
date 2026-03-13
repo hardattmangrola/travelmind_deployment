@@ -102,7 +102,7 @@ export default function PlannerPage() {
       return;
     }
 
-    router.push("/proposal?destination=goa&style=relaxed");
+    router.push("/itinerary/t1/build");
   };
 
   return (
