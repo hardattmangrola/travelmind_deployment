@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Menu, Plane, Search, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSession, signOut } from "@/lib/auth-client";
@@ -33,7 +33,6 @@ function getInitials(name: string): string {
 
 export function Navbar() {
   const pathname = usePathname();
-  const router = useRouter();
   const { data: session } = useSession();
   const isLoggedIn = !!session;
 
@@ -48,13 +47,13 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#E8E8E2] bg-white/95 backdrop-blur-md">
-      <div className="tm-container flex h-16 items-center justify-between">
+    <header className="sticky top-0 z-50 border-b border-[color:var(--color-border)] bg-[rgba(255,255,255,0.95)] backdrop-blur-md">
+      <div className="tm-container flex h-[72px] items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#EEF2FF] text-[#4F46E5]">
-            <Plane className="h-4 w-4" />
+          <span className="flex h-11 w-11 items-center justify-center rounded-full border border-[color:rgba(244,164,96,0.4)] bg-[color:var(--color-sand-light)] text-primary shadow-[var(--shadow-xs)]">
+            <Plane className="h-[18px] w-[18px]" />
           </span>
-          <span className="font-display text-2xl font-bold tracking-tight text-[#111111]">
+          <span className="font-display text-2xl font-bold tracking-tight text-primary">
             TravelMind
           </span>
         </Link>
@@ -68,13 +67,13 @@ export function Navbar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "relative pb-1 text-sm text-[#6B7280] transition-colors hover:text-[#111111]",
-                  isActive && "font-medium text-[#111111]",
+                  "relative rounded-full px-3 py-2 text-[15px] font-medium text-[color:var(--color-text-secondary)] transition-all duration-150 ease-out hover:bg-[color:var(--color-surface)] hover:text-[color:var(--color-earth)]",
+                  isActive && "bg-[color:var(--color-sand-light)] font-semibold text-[color:var(--color-earth)]",
                 )}
               >
                 {item.label}
                 {isActive && (
-                  <span className="absolute -bottom-0.5 left-0 h-0.5 w-full rounded-full bg-[#4F46E5]" />
+                  <span className="absolute bottom-0 left-1/2 h-[3px] w-8 -translate-x-1/2 rounded-full bg-primary" />
                 )}
               </Link>
             );
@@ -85,25 +84,25 @@ export function Navbar() {
           <button
             type="button"
             aria-label="Search"
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E8E8E2] bg-white text-[#6B7280] transition-colors hover:bg-[#F7F7F4] hover:text-[#111111]"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-white)] text-[color:var(--color-text-secondary)] transition-all duration-150 ease-out hover:border-[color:var(--color-sand)] hover:bg-[color:var(--color-sand-light)] hover:text-[color:var(--color-earth)]"
           >
-            <Search className="h-4 w-4" />
+            <Search className="h-[18px] w-[18px]" />
           </button>
 
           {isLoggedIn ? (
             <div className="flex items-center gap-2">
               <Link
                 href="/dashboard"
-                className="flex items-center gap-2 rounded-xl border border-[#E8E8E2] px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                className="flex min-h-11 items-center gap-2 rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-white)] px-4 py-2 text-[15px] font-medium text-[color:var(--color-earth)] transition-all duration-150 ease-out hover:border-[color:var(--color-sand)] hover:bg-[color:var(--color-sand-light)]"
               >
                 {session.user?.image ? (
                   <img
                     src={session.user.image}
                     alt={session.user.name || ""}
-                    className="h-6 w-6 rounded-full object-cover"
+                    className="h-7 w-7 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-bold text-white">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
                     {getInitials(session.user?.name || "U")}
                   </div>
                 )}
@@ -124,15 +123,15 @@ export function Navbar() {
             <button
               type="button"
               aria-label="Open menu"
-              className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E8E8E2] bg-white text-[#374151] md:hidden"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-white)] text-[color:var(--color-earth)] transition-all duration-150 ease-out hover:border-[color:var(--color-sand)] hover:bg-[color:var(--color-sand-light)] md:hidden"
             >
-              <Menu className="h-4 w-4" />
+              <Menu className="h-[18px] w-[18px]" />
             </button>
           </SheetTrigger>
-          <SheetContent side="bottom" className="rounded-t-3xl border-[#E8E8E2] bg-white p-0" showCloseButton={false}>
+          <SheetContent side="bottom" className="rounded-t-[var(--radius-lg)] border-[color:var(--color-border)] bg-[color:var(--color-white)] p-0" showCloseButton={false}>
             <SheetHeader className="px-6 pt-6 pb-2 text-left">
-              <SheetTitle className="font-display text-2xl">TravelMind</SheetTitle>
-              <SheetDescription>Plan your next trip with confidence.</SheetDescription>
+              <SheetTitle className="font-display text-2xl text-primary">TravelMind</SheetTitle>
+              <SheetDescription className="text-[color:var(--color-text-secondary)]">Plan your next trip with confidence.</SheetDescription>
             </SheetHeader>
             <nav className="space-y-1 px-4 pb-6">
               {navItems.map((item) => {
@@ -142,8 +141,8 @@ export function Navbar() {
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      "block rounded-xl px-4 py-3 text-sm text-[#374151] transition-colors hover:bg-[#F7F7F4]",
-                      isActive && "bg-[#EEF2FF] font-medium text-[#4338CA]",
+                      "block min-h-11 rounded-[var(--radius-md)] px-4 py-3 text-[15px] text-[color:var(--color-earth)] transition-colors duration-150 ease-out hover:bg-[color:var(--color-surface)]",
+                      isActive && "bg-[color:var(--color-sand-light)] font-semibold text-[color:var(--color-earth)]",
                     )}
                   >
                     {item.label}
@@ -153,9 +152,9 @@ export function Navbar() {
               {isLoggedIn ? (
                 <button
                   onClick={handleSignOut}
-                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600 transition hover:bg-rose-100"
+                  className="mt-3 flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-sand-light)] px-4 py-3 text-[15px] font-medium text-[color:var(--color-earth)] transition-all duration-150 ease-out hover:border-[color:var(--color-sand)]"
                 >
-                  <LogOut className="h-4 w-4" />
+                  <LogOut className="h-[18px] w-[18px]" />
                   Sign Out
                 </button>
               ) : (

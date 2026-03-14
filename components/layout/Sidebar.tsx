@@ -10,18 +10,21 @@ import {
   Lock,
   LogOut,
   MessageCircle,
-  Map,
   Plane,
   Search,
   Settings,
   Sparkles,
-  User,
   Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSession, signOut } from "@/lib/auth-client";
 import { useEffect, useState } from "react";
 import { useWishlistStore } from "@/lib/stores/wishlist-store";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Sidebar as ShadcnSidebar,
   SidebarContent,
@@ -37,10 +40,10 @@ import {
 
 const menuItems = [
   { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-  { label: "Plan a Trip", icon: Sparkles, href: "/planner", highlighted: true },
-  { label: "Explore", icon: Search, href: "/search" },
+  { label: "Planner", icon: Sparkles, href: "/planner" },
+  { label: "Destinations", icon: Search, href: "/search" },
+  { label: "Invitations", icon: Users, href: "/invitations" },
   { label: "Wishlist", icon: Heart, href: "/wishlist" },
-  { label: "My Trips", icon: Map, href: "/profile" },
 ] as const;
 
 type Status = "draft" | "active" | "completed";
@@ -56,12 +59,12 @@ interface SidebarTrip {
 function getStatusDotColor(status: Status): string {
   switch (status) {
     case "active":
-      return "bg-emerald-500";
+      return "bg-primary";
     case "completed":
-      return "bg-slate-400";
+      return "bg-[color:var(--color-earth)]";
     case "draft":
     default:
-      return "bg-amber-400";
+      return "bg-[color:var(--color-sand)]";
   }
 }
 
@@ -133,14 +136,14 @@ export function Sidebar() {
     <ShadcnSidebar
       variant="sidebar"
       side="left"
-      className="border-r border-[#E8E8E2] bg-white/95"
+      className="border-r border-[color:var(--color-border)] bg-[rgba(255,255,255,0.96)]"
     >
-      <SidebarHeader className="px-4 py-4">
+      <SidebarHeader className="px-4 py-5">
         <div className="flex items-center gap-2 px-1">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#EEF2FF] text-[#4F46E5] shadow-sm">
-            <Plane className="h-4 w-4" />
+          <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[color:rgba(244,164,96,0.4)] bg-[color:var(--color-sand-light)] text-primary shadow-[var(--shadow-xs)]">
+            <Plane className="h-[18px] w-[18px]" />
           </div>
-          <span className="font-display text-2xl font-bold tracking-tight text-[#111111]">
+          <span className="font-display text-2xl font-bold tracking-tight text-primary">
             TravelMind
           </span>
         </div>
@@ -148,7 +151,7 @@ export function Sidebar() {
 
       <SidebarContent className="px-2 pb-4">
         <SidebarGroup>
-          <SidebarGroupLabel className="px-2 text-xs font-semibold tracking-[0.16em] text-[#9CA3AF]">
+          <SidebarGroupLabel className="px-2 text-[11px] font-semibold tracking-[0.1em] text-[color:var(--color-text-tertiary)]">
             MENU
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -166,16 +169,15 @@ export function Sidebar() {
                       asChild
                       isActive={isActive}
                       className={cn(
-                        "h-10 rounded-xl px-3 text-sm font-medium text-[#6B7280] hover:bg-[#F7F7F4] hover:text-[#111111]",
-                        isActive && "bg-[#EEF2FF] text-[#4338CA]",
-                        "highlighted" in item && item.highlighted && !isActive && "bg-[#FFF7ED] text-[#C2410C] hover:bg-orange-100",
+                        "h-11 rounded-[var(--radius-md)] px-3 text-[15px] font-medium text-[color:var(--color-text-secondary)] transition-all duration-150 ease-out hover:bg-[color:var(--color-surface)] hover:text-[color:var(--color-earth)]",
+                        isActive && "bg-[color:var(--color-sand-light)] text-[color:var(--color-earth)] before:absolute before:left-0 before:top-2 before:h-7 before:w-[3px] before:rounded-r-full before:bg-primary",
                       )}
                     >
                       <Link href={item.href} className="relative">
                         <Icon className="h-4 w-4" />
                         <span>{item.label}</span>
                         {item.label === "Wishlist" && newCount > 0 && (
-                          <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[9px] font-bold text-white shadow-sm">
+                          <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-white shadow-xs">
                             {newCount > 9 ? "9+" : newCount}
                           </span>
                         )}
@@ -184,25 +186,14 @@ export function Sidebar() {
                   </SidebarMenuItem>
                 );
               })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        {/* Chat - Pro only */}
-        <SidebarGroup>
-          <SidebarGroupLabel className="px-2 text-xs font-semibold tracking-[0.16em] text-[#9CA3AF]">
-            COLLABORATE
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu className="gap-1">
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
                   className={cn(
-                    "h-10 rounded-xl px-3 text-sm font-medium",
+                    "h-11 rounded-[var(--radius-md)] px-3 text-[15px] font-medium",
                     userPlan === "pro"
-                      ? "text-[#6B7280] hover:bg-[#F7F7F4] hover:text-[#111111]"
-                      : "text-slate-300 cursor-not-allowed"
+                      ? "text-[color:var(--color-text-secondary)] hover:bg-[color:var(--color-surface)] hover:text-[color:var(--color-earth)]"
+                      : "cursor-not-allowed text-[color:var(--color-text-tertiary)]"
                   )}
                   disabled={userPlan !== "pro"}
                 >
@@ -215,32 +206,37 @@ export function Sidebar() {
                     <div className="flex items-center gap-2">
                       <MessageCircle className="h-4 w-4" />
                       <span>Chat</span>
-                      <Lock className="ml-auto h-3 w-3 text-slate-300" />
+                      <Lock className="ml-auto h-3 w-3 text-[color:var(--color-text-tertiary)]" />
                     </div>
                   )}
                 </SidebarMenuButton>
-                {userPlan !== "pro" && (
-                  <Link
-                    href="/choose-plan"
-                    className="mt-1 ml-3 block text-[10px] font-medium text-indigo-500 hover:text-indigo-600 hover:underline"
-                  >
-                    Upgrade to Pro →
-                  </Link>
-                )}
               </SidebarMenuItem>
+              {userPlan !== "pro" && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    className="h-11 rounded-[var(--radius-md)] px-3 text-[15px] font-medium text-primary hover:bg-[color:var(--color-sand-light)] hover:text-[color:var(--color-primary-hover)]"
+                  >
+                    <Link href="/choose-plan">
+                      <Crown className="h-4 w-4" />
+                      <span>Upgrade to Pro</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="px-2 text-xs font-semibold tracking-[0.16em] text-[#9CA3AF]">
+          <SidebarGroupLabel className="px-2 text-[11px] font-semibold tracking-[0.1em] text-[color:var(--color-text-tertiary)]">
             TRIPS
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="gap-2">
               {recentTrips.length === 0 ? (
                 <SidebarMenuItem>
-                  <div className="px-3 py-2 text-xs text-slate-400 italic">
+                  <div className="px-3 py-2 text-xs text-[color:var(--color-text-tertiary)] italic">
                     No trips yet — plan your first!
                   </div>
                 </SidebarMenuItem>
@@ -249,7 +245,7 @@ export function Sidebar() {
                   <SidebarMenuItem key={trip.id}>
                     <SidebarMenuButton
                       asChild
-                      className="h-auto rounded-xl border border-[#E8E8E2] bg-[#F7F7F4] px-3 py-2 text-xs shadow-sm hover:border-[#D4D4CC] hover:bg-white"
+                      className="h-auto rounded-[var(--radius-md)] border border-[color:var(--color-border)] bg-[color:var(--color-surface)] px-3 py-2 text-xs shadow-[var(--shadow-xs)] transition-all duration-150 ease-out hover:border-[color:var(--color-sand)] hover:bg-[color:var(--color-white)]"
                     >
                       <Link href={`/itinerary/${trip.id}/view`}>
                         <span
@@ -259,10 +255,10 @@ export function Sidebar() {
                           )}
                         />
                         <span className="flex min-w-0 flex-col">
-                          <span className="max-w-[9rem] truncate text-[11px] font-medium text-slate-800">
+                            <span className="max-w-[9rem] truncate text-[11px] font-medium text-[color:var(--color-text-primary)]">
                             {trip.title}
                           </span>
-                          <span className="text-[11px] text-slate-500">
+                            <span className="text-[11px] text-[color:var(--color-text-secondary)]">
                             {trip.destination} {getFlagEmoji(trip.country)}
                           </span>
                         </span>
@@ -275,80 +271,85 @@ export function Sidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarGroup>
-          <SidebarGroupLabel className="px-2 text-xs font-semibold tracking-[0.16em] text-[#9CA3AF]">
-            ACCOUNT
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu className="gap-1">
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  className="h-10 rounded-xl px-3 text-sm font-medium text-[#6B7280] hover:bg-[#F7F7F4] hover:text-[#111111]"
-                >
-                  <Link href="/profile">
-                    <User className="h-4 w-4" />
-                    <span>Profile</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton className="h-10 rounded-xl px-3 text-sm font-medium text-[#6B7280] hover:bg-[#F7F7F4] hover:text-[#111111]">
-                  <Settings className="h-4 w-4" />
-                  <span>Settings</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton className="h-10 rounded-xl px-3 text-sm font-medium text-[#6B7280] hover:bg-[#F7F7F4] hover:text-[#111111]">
-                  <HelpCircle className="h-4 w-4" />
-                  <span>Help</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  onClick={handleSignOut}
-                  className="h-10 rounded-xl px-3 text-sm font-medium text-rose-500 hover:bg-rose-50 hover:text-rose-700"
-                >
-                  <LogOut className="h-4 w-4" />
-                  <span>Sign Out</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
       </SidebarContent>
 
       <SidebarFooter className="px-4 pb-4 pt-2">
-        <div className="space-y-3 rounded-2xl border border-[#E8E8E2] bg-[#F7F7F4] p-3 shadow-inner">
-          <div className="flex items-center gap-3">
-            {session?.user?.image ? (
-              <img
-                src={session.user.image}
-                alt={userName}
-                className="h-9 w-9 rounded-full object-cover"
-              />
-            ) : (
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#4F46E5] text-xs font-semibold text-white">
-                {getInitials(userName)}
+        <Popover>
+          <PopoverTrigger asChild>
+            <button
+              type="button"
+              className="w-full rounded-[var(--radius-lg)] border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-3 text-left shadow-[var(--shadow-xs)] transition-all duration-150 ease-out hover:border-[color:var(--color-sand)] hover:bg-[color:var(--color-white)]"
+              aria-label="Open account menu"
+            >
+              <div className="flex items-center gap-3">
+                {session?.user?.image ? (
+                  <img
+                    src={session.user.image}
+                    alt={userName}
+                    className="h-9 w-9 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-xs font-semibold text-white">
+                    {getInitials(userName)}
+                  </div>
+                )}
+                <div className="flex flex-1 flex-col">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-sm font-medium text-[color:var(--color-text-primary)]">{userName}</span>
+                    <span className={cn(
+                      "inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider",
+                      userPlan === "pro"
+                        ? "bg-primary text-white"
+                        : "bg-[color:var(--color-sand-light)] text-[color:var(--color-earth)]"
+                    )}>
+                      {userPlan === "pro" && <Crown className="h-2.5 w-2.5" />}
+                      {userPlan}
+                    </span>
+                  </div>
+                  <span className="text-xs text-[color:var(--color-text-secondary)]">{userEmail}</span>
+                </div>
               </div>
-            )}
-            <div className="flex flex-1 flex-col">
-              <div className="flex items-center gap-1.5">
-                <span className="text-sm font-medium text-slate-900">{userName}</span>
-                <span className={cn(
-                  "inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider",
-                  userPlan === "pro"
-                    ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white"
-                    : "bg-slate-100 text-slate-500"
-                )}>
-                  {userPlan === "pro" && <Crown className="h-2.5 w-2.5" />}
-                  {userPlan}
-                </span>
-              </div>
-              <span className="text-xs text-slate-500">{userEmail}</span>
+            </button>
+          </PopoverTrigger>
+
+          <PopoverContent
+            side="right"
+            align="end"
+            sideOffset={12}
+            className="w-56 rounded-[var(--radius-lg)] border border-[color:var(--color-border)] bg-[color:var(--color-white)] p-2 shadow-[var(--shadow-lg)]"
+          >
+            <div className="mb-1 px-2 py-1">
+              <p className="text-[11px] font-semibold tracking-[0.1em] text-[color:var(--color-text-tertiary)]">
+                ACCOUNT
+              </p>
             </div>
-          </div>
-        </div>
+
+            <button
+              type="button"
+              className="flex h-10 w-full items-center gap-2 rounded-[var(--radius-md)] px-3 text-[15px] font-medium text-[color:var(--color-text-secondary)] transition-colors duration-150 ease-out hover:bg-[color:var(--color-surface)] hover:text-[color:var(--color-earth)]"
+            >
+              <Settings className="h-4 w-4" />
+              <span>Settings</span>
+            </button>
+
+            <button
+              type="button"
+              className="flex h-10 w-full items-center gap-2 rounded-[var(--radius-md)] px-3 text-[15px] font-medium text-[color:var(--color-text-secondary)] transition-colors duration-150 ease-out hover:bg-[color:var(--color-surface)] hover:text-[color:var(--color-earth)]"
+            >
+              <HelpCircle className="h-4 w-4" />
+              <span>Help</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className="flex h-10 w-full items-center gap-2 rounded-[var(--radius-md)] px-3 text-[15px] font-medium text-primary transition-colors duration-150 ease-out hover:bg-[color:var(--color-sand-light)] hover:text-[color:var(--color-primary-hover)]"
+            >
+              <LogOut className="h-4 w-4" />
+              <span>Sign Out</span>
+            </button>
+          </PopoverContent>
+        </Popover>
       </SidebarFooter>
     </ShadcnSidebar>
   );
