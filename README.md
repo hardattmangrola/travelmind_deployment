@@ -1,8 +1,47 @@
-# Breach26 – Full Stack AI Application Template
+<h1 align="center">TravelMind</h1>
 
-A modern **production-ready full-stack template** built with **Next.js 15+, Bun, Prisma, Better Auth, and shadcn/ui**, designed for building scalable AI-powered web applications.
+<p align="center">
+<strong>Intelligent AI Travel Planning Platform</strong><br>
+Plan smarter trips with AI-powered recommendations, collaborative itineraries, and real-time insights.
+</p>
 
-This template is optimized for **hackathons, rapid prototyping, and production systems**, and supports **AI features such as Retrieval-Augmented Generation (RAG), recommendation systems, and vector search pipelines**.
+<p align="center">
+<img src="https://img.shields.io/badge/AI-RAG%20Powered-blue?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Stack-Next.js%20%7C%20PostgreSQL%20%7C%20AI-black?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Status-Active%20Development-success?style=for-the-badge"/>
+</p>
+
+<hr/>
+
+<h2>Overview</h2>
+
+<p>
+<strong>TravelMind</strong> is a sophisticated AI-powered travel planning platform designed to transform how travelers discover, plan, and collaborate on their journeys. Built using a high-performance full-stack architecture and modern AI infrastructure, the platform delivers an end-to-end experience from inspiration to itinerary management.
+</p>
+
+<p>
+By integrating <strong>Retrieval-Augmented Generation (RAG)</strong> and personalized recommendation engines, TravelMind converts static travel data into dynamic, context-aware insights tailored to each user's preferences and travel behavior.
+</p>
+
+<hr/>
+
+<h2>Key Capabilities</h2>
+
+<ul>
+<li><strong>AI-Powered Discovery</strong> — Retrieval-Augmented Generation enables contextual travel insights.</li>
+<li><strong>Personalized Recommendations</strong> — Intelligent systems adapt suggestions based on user behavior and preferences.</li>
+<li><strong>Smart Itinerary Planning</strong> — Automatically generate structured travel plans with optimized destinations and activities.</li>
+<li><strong>Collaborative Planning</strong> — Users can plan trips together using shared itineraries and recommendations.</li>
+<li><strong>Scalable Modern Architecture</strong> — Built using Next.js, PostgreSQL, vector databases, and AI integrations.</li>
+</ul>
+
+<hr/>
+
+<h2>Vision</h2>
+
+<p>
+TravelMind aims to transform traditional travel search into an intelligent planning experience where AI acts as a personalized travel assistant. The platform enables users to explore destinations, optimize itineraries, and uncover travel opportunities tailored specifically to them.
+</p>.
 
 ---
 
