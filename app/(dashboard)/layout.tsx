@@ -8,9 +8,7 @@ import {
   Search,
   Sparkles,
   Heart,
-  User as UserIcon,
 } from "lucide-react";
-import { Navbar } from "@/components/layout/Navbar";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { cn } from "@/lib/utils";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
@@ -27,7 +25,6 @@ const bottomNavItems = [
   { label: "Explore", icon: Search, href: "/search" },
   { label: "Plan", icon: Sparkles, href: "/planner" },
   { label: "Wishlist", icon: Heart, href: "/wishlist" },
-  { label: "Profile", icon: UserIcon, href: "/profile" },
 ] as const;
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
@@ -44,10 +41,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   if (isPending) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
-          <p className="text-sm text-slate-500">Loading...</p>
+      <div className="flex min-h-screen items-center justify-center bg-[color:var(--color-cream)]">
+        <div className="flex flex-col items-center gap-3 rounded-[var(--radius-lg)] border border-[color:var(--color-border)] bg-[color:var(--color-white)] px-8 py-7 shadow-[var(--shadow-sm)]">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <p className="text-sm text-[color:var(--color-text-secondary)]">Loading your dashboard...</p>
         </div>
       </div>
     );
@@ -61,17 +58,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     <SidebarProvider defaultOpen>
       <Sidebar />
 
-      <SidebarInset className="min-h-screen bg-slate-50">
-        <Navbar />
-
-        <main className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 pb-20 pt-4 lg:px-12 md:pb-8">
+      <SidebarInset className="min-h-screen bg-[color:var(--color-cream)]">
+        <main className="relative mx-auto flex w-full max-w-[1280px] flex-1 flex-col px-5 pb-24 pt-6 lg:px-10 md:pb-10 md:pt-8">
           <AnimatePresence mode="wait">
             <motion.div
               key={pathname}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
+              exit={{ opacity: 0, y: 8 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
               className="flex-1"
             >
               {children}
@@ -81,7 +76,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       </SidebarInset>
 
       {/* Mobile bottom nav */}
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 backdrop-blur-md md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--color-border)] bg-[rgba(255,255,255,0.95)] backdrop-blur-md md:hidden">
         <div className="mx-auto flex max-w-lg items-center justify-between px-4 py-2.5">
           {bottomNavItems.map((item) => {
             const Icon = item.icon;
@@ -95,19 +90,19 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex flex-1 flex-col items-center gap-1 text-xs font-medium",
-                  isActive ? "text-indigo-600" : "text-slate-400",
+                  "flex min-h-11 flex-1 flex-col items-center gap-1 text-xs font-medium transition-colors duration-150 ease-out",
+                  isActive ? "text-[color:var(--color-earth)]" : "text-[color:var(--color-text-tertiary)]",
                 )}
               >
                 <div
                   className={cn(
-                    "relative flex h-9 w-9 items-center justify-center rounded-full",
-                    isActive ? "bg-indigo-50" : "bg-transparent",
+                    "relative flex h-11 w-11 items-center justify-center rounded-full transition-all duration-150 ease-out",
+                    isActive ? "border border-[color:rgba(244,164,96,0.35)] bg-[color:var(--color-sand-light)]" : "bg-transparent",
                   )}
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon className="h-[18px] w-[18px]" />
                   {item.label === "Wishlist" && newCount > 0 && (
-                    <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[8px] font-bold text-white shadow-sm ring-2 ring-white">
+                    <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[8px] font-bold text-white shadow-xs ring-2 ring-white">
                       {newCount > 9 ? "9+" : newCount}
                     </span>
                   )}

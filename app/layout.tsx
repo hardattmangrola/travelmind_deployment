@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Outfit, Quicksand } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const outfit = Outfit({
   variable: "--font-sans",
+  weight: ["300", "400", "500", "600"],
   subsets: ["latin"],
   display: "swap",
 });
 
-const playfair = Playfair_Display({
+const quicksand = Quicksand({
   variable: "--font-display",
+  weight: ["500", "600", "700"],
   subsets: ["latin"],
   display: "swap",
 });
@@ -27,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${playfair.variable} antialiased`}
+        className={`${outfit.variable} ${quicksand.variable} antialiased`}
       >
         {children}
       </body>

@@ -11,7 +11,7 @@ export default function Home() {
   const destinations = popularDestinations.slice(0, 4);
 
   return (
-    <div className="bg-[#FAFAF8] text-[#111111]">
+    <div className="bg-background text-foreground">
       <Navbar />
 
       <section className="relative min-h-[60vh] overflow-hidden md:min-h-[85vh]">
@@ -22,50 +22,50 @@ export default function Home() {
           priority
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/25 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[rgba(160,82,45,0.48)] via-[rgba(227,83,54,0.24)] to-[rgba(245,245,220,0.10)]" />
 
         <div className="tm-container relative z-10 flex min-h-[60vh] flex-col justify-center py-16 text-white md:min-h-[85vh]">
-          <p className="tm-label text-white/80">WORLDWIDE CURATED EXPERIENCES</p>
+          <p className="tm-label text-white/90">WORLDWIDE CURATED EXPERIENCES</p>
           <h1 className="tm-hero-title mt-4 max-w-4xl text-white">
             The easiest way to plan your next unforgettable journey.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-white/80">
+          <p className="mt-6 max-w-2xl text-lg leading-[1.7] text-white/90">
             Discover destinations, compare stays, and build a personalized itinerary with premium design and trusted recommendations.
           </p>
         </div>
 
         <div className="tm-container relative z-20 -mt-12 pb-8 md:-mt-16">
           <div className="tm-search-shell flex flex-col gap-2 p-2 md:flex-row md:items-center md:gap-0">
-            <div className="flex flex-1 items-center gap-3 rounded-xl px-4 py-3 md:rounded-none md:border-r md:border-[#E8E8E2]">
-              <MapPin className="h-4 w-4 text-[#6B7280]" />
+            <div className="flex flex-1 items-center gap-3 rounded-xl px-4 py-3 md:rounded-none md:border-r md:border-border">
+              <MapPin className="h-[18px] w-[18px] text-muted-foreground" />
               <div>
-                <p className="tm-label text-[11px] text-[#6B7280]">Where</p>
-                <p className="text-sm text-[#9CA3AF]">Search destinations</p>
+                <p className="tm-label">Where</p>
+                <p className="text-sm text-[color:var(--color-text-tertiary)]">Search destinations</p>
               </div>
             </div>
-            <div className="flex flex-1 items-center gap-3 rounded-xl px-4 py-3 md:rounded-none md:border-r md:border-[#E8E8E2]">
-              <CalendarDays className="h-4 w-4 text-[#6B7280]" />
+            <div className="flex flex-1 items-center gap-3 rounded-xl px-4 py-3 md:rounded-none md:border-r md:border-border">
+              <CalendarDays className="h-[18px] w-[18px] text-muted-foreground" />
               <div>
-                <p className="tm-label text-[11px] text-[#6B7280]">Check-in</p>
-                <p className="text-sm text-[#9CA3AF]">Add dates</p>
+                <p className="tm-label">Check-in</p>
+                <p className="text-sm text-[color:var(--color-text-tertiary)]">Add dates</p>
               </div>
             </div>
-            <div className="flex flex-1 items-center gap-3 rounded-xl px-4 py-3 md:rounded-none md:border-r md:border-[#E8E8E2]">
-              <CalendarDays className="h-4 w-4 text-[#6B7280]" />
+            <div className="flex flex-1 items-center gap-3 rounded-xl px-4 py-3 md:rounded-none md:border-r md:border-border">
+              <CalendarDays className="h-[18px] w-[18px] text-muted-foreground" />
               <div>
-                <p className="tm-label text-[11px] text-[#6B7280]">Check-out</p>
-                <p className="text-sm text-[#9CA3AF]">Add dates</p>
+                <p className="tm-label">Check-out</p>
+                <p className="text-sm text-[color:var(--color-text-tertiary)]">Add dates</p>
               </div>
             </div>
             <div className="flex flex-1 items-center gap-3 rounded-xl px-4 py-3 md:rounded-none">
-              <Users className="h-4 w-4 text-[#6B7280]" />
+              <Users className="h-[18px] w-[18px] text-muted-foreground" />
               <div>
-                <p className="tm-label text-[11px] text-[#6B7280]">Travelers</p>
-                <p className="text-sm text-[#9CA3AF]">2 guests</p>
+                <p className="tm-label">Travelers</p>
+                <p className="text-sm text-[color:var(--color-text-tertiary)]">2 guests</p>
               </div>
             </div>
             <button className="tm-btn-primary h-12 w-full gap-2 md:ml-2 md:w-auto md:px-6">
-              <Search className="h-4 w-4" />
+              <Search className="h-[18px] w-[18px]" />
               Search
             </button>
           </div>
@@ -78,7 +78,7 @@ export default function Home() {
             <p className="tm-label">TRENDING NOW</p>
             <h2 className="tm-h2 mt-2">Featured Destinations</h2>
           </div>
-          <Link href="/search" className="text-sm font-medium text-[#4F46E5] hover:text-[#4338CA]">
+          <Link href="/search" className="text-sm font-medium text-primary hover:text-[color:var(--color-primary-hover)]">
             Explore all
           </Link>
         </div>
@@ -92,7 +92,7 @@ export default function Home() {
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[rgba(160,82,45,0.72)] via-[rgba(160,82,45,0.28)] to-transparent" />
               <div className="absolute bottom-4 left-4 right-4">
                 <h3 className="font-display text-2xl font-bold text-white">{destination.name}</h3>
                 <p className="text-sm text-white/75">{destination.country}</p>
@@ -108,7 +108,7 @@ export default function Home() {
             <p className="tm-label">TOP STAYS</p>
             <h2 className="tm-h2 mt-2">Boutique Hotels You Will Love</h2>
           </div>
-          <Link href="/search" className="text-sm font-medium text-[#4F46E5] hover:text-[#4338CA]">
+          <Link href="/search" className="text-sm font-medium text-primary hover:text-[color:var(--color-primary-hover)]">
             View all stays
           </Link>
         </div>
@@ -120,11 +120,11 @@ export default function Home() {
                 <Image src={hotel.images[0]} alt={hotel.name} fill className="object-cover" />
               </div>
               <div className="p-4">
-                <h3 className="text-base font-semibold text-[#111111]">{hotel.name}</h3>
-                <p className="mt-1 text-[13px] text-[#6B7280]">{hotel.city}, {hotel.country}</p>
+                <h3 className="font-display text-lg font-semibold text-foreground">{hotel.name}</h3>
+                <p className="mt-1 text-[13px] text-muted-foreground">{hotel.city}, {hotel.country}</p>
                 <p className="mt-3">
-                  <span className="text-xl font-bold text-[#111111]">{formatCurrency(hotel.pricePerNight, hotel.currency)}</span>
-                  <span className="ml-1 text-[13px] text-[#6B7280]">per night</span>
+                  <span className="text-xl font-bold text-foreground">{formatCurrency(hotel.pricePerNight, hotel.currency)}</span>
+                  <span className="ml-1 text-[13px] text-muted-foreground">per night</span>
                 </p>
               </div>
             </article>
@@ -151,8 +151,8 @@ export default function Home() {
               </div>
               <div className="p-4">
                 <span className="tm-badge tm-badge-adventure">{activity.category}</span>
-                <h3 className="mt-2 text-base font-semibold text-[#111111]">{activity.name}</h3>
-                <p className="mt-1 text-[13px] text-[#6B7280]">{activity.description}</p>
+                <h3 className="font-display mt-2 text-lg font-semibold text-foreground">{activity.name}</h3>
+                <p className="mt-1 text-[13px] text-muted-foreground">{activity.description}</p>
               </div>
             </article>
           ))}

@@ -181,7 +181,7 @@ export function GroupChat({ itineraryId, isOpen, onClose, inline = false }: Grou
 
   // ── Overlay mode: existing behavior ──
   return (
-    <div className="fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col border-l border-slate-200 bg-white shadow-2xl sm:max-w-md transition-transform duration-300">
+    <div className="fixed inset-y-0 right-0 z-2000 flex w-full max-w-sm flex-col border-l border-slate-200 bg-white shadow-2xl sm:max-w-md transition-transform duration-300">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
         <div className="flex items-center gap-2">
