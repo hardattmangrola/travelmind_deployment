@@ -172,8 +172,13 @@ The goal of this template is to provide a **scalable base architecture** for app
 
 During the brainstorming phase, we mapped the complete user journey and created **low-fidelity wireframes** on Figma to validate the product flow before starting development. After multiple iterations, we finalized **11 core screens** covering authentication, dashboard, trip planning, collaboration, AI planning, and wishlist.
 
- **View our Low Fidelity Design**  
-[Click here to open the wireframes](https://www.figma.com/design/B44n2qMVdnGPGfohEjHC36/TravelMind?node-id=0-1&t=3Blvbj3Lz5svvmJu-1)
+<p align="center">
+
+ **Explore our Design**
+
+[![Open Figma Design](https://img.shields.io/badge/Open%20Figma%20Design-FF7262?style=for-the-badge&logo=figma&logoColor=white)](https://www.figma.com/design/B44n2qMVdnGPGfohEjHC36/TravelMind?node-id=0-1&t=3Blvbj3Lz5svvmJu-1)
+
+</p>
 
 These wireframes helped us quickly validate **navigation flow, feature placement, and overall user experience** before moving to high-fidelity UI and implementation.
 # Project Structure
