@@ -74,18 +74,88 @@ The goal of this template is to provide a **scalable base architecture** for app
 
 ---
 
-# Technology Stack
+#  Technology Stack
 
-| Layer          | Technology                          |
-| -------------- | ----------------------------------- |
-| Frontend       | Next.js 15                          |
-| Backend        | Next.js API Routes                  |
-| Runtime        | Bun                                 |
-| Database       | PostgreSQL                          |
-| ORM            | Prisma                              |
-| Authentication | Better Auth                         |
-| UI             | shadcn/ui + TailwindCSS             |
-| AI             | LangChain / HuggingFace / Vector DB |
+#### Core Framework & Language
+<p align="left">
+  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white"/>
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB"/>
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Bun-000000?style=for-the-badge&logo=bun&logoColor=white"/>
+</p>
+
+#### Database & Storage
+<p align="left">
+  <img src="https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Pinecone_Vector_DB-1B1F23?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/pgvector-4169E1?style=for-the-badge"/>
+</p>
+
+#### Artificial Intelligence & RAG
+<p align="left">
+  <img src="https://img.shields.io/badge/LangChain.js-121212?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Google_Gemini-4285F4?style=for-the-badge&logo=google"/>
+  <img src="https://img.shields.io/badge/OpenAI-000000?style=for-the-badge&logo=openai"/>
+  <img src="https://img.shields.io/badge/HuggingFace-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black"/>
+</p>
+
+#### Authentication & Payments
+<p align="left">
+  <img src="https://img.shields.io/badge/Better_Auth-000000?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Stripe-635BFF?style=for-the-badge&logo=stripe&logoColor=white"/>
+</p>
+
+#### UI & Styling
+<p align="left">
+  <img src="https://img.shields.io/badge/TailwindCSS-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Shadcn_UI-000000?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Radix_UI-161618?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Framer_Motion-EF008F?style=for-the-badge&logo=framer"/>
+  <img src="https://img.shields.io/badge/Lucide_Icons-F56565?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Embla_Carousel-000000?style=for-the-badge"/>
+</p>
+
+#### State & Form Management
+<p align="left">
+  <img src="https://img.shields.io/badge/Zustand-443E38?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/React_Hook_Form-EC5990?style=for-the-badge&logo=reacthookform&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge"/>
+</p>
+
+#### Visualization & Maps
+<p align="left">
+  <img src="https://img.shields.io/badge/Leaflet-199900?style=for-the-badge&logo=leaflet&logoColor=white"/>
+  <img src="https://img.shields.io/badge/React_Leaflet-61DAFB?style=for-the-badge&logo=react"/>
+  <img src="https://img.shields.io/badge/Recharts-FF7300?style=for-the-badge"/>
+</p>
+
+#### Utilities
+<p align="left">
+  <img src="https://img.shields.io/badge/date--fns-FC6E6E?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/clsx-000000?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/tailwind--merge-38B2AC?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/jsPDF-A020F0?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/html--to--image-000000?style=for-the-badge"/>
+</p>
+
+---
+
+## Technical Details
+
+### Core Infrastructure
+- **Next.js 16**: Utilizing the latest features for server-side rendering and static site generation.
+- **TypeScript**: Ensuring end-to-end type safety across the entire application.
+- **Bun**: Ultra-fast runtime and package manager.
+
+### Data & AI
+- **Prisma**: Type-safe ORM for interacting with the PostgreSQL database.
+- **RAG Pipeline**: Custom Retrieval-Augmented Generation implementation using LangChain, Pinecone, and Gemini/OpenAI for personalized travel planning.
+
+### Frontend
+- **Shadcn UI & Radix UI**: Accessible, high-quality component primitives.
+- **Tailwind CSS 4**: Modern utility-first styling.
+- **Framer Motion**: Smooth, high-performance interactions and transitions.|
 
 ---
 
