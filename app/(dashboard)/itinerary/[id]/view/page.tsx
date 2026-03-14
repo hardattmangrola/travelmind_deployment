@@ -22,6 +22,8 @@ import { Timeline } from "@/components/itinerary/Timeline";
 import { formatCurrency } from "@/lib/utils";
 import { GroupChat } from "@/components/chat/GroupChat";
 import { useSession } from "@/lib/auth-client";
+import { downloadPdf } from "@/lib/pdf-service";
+import { Download } from "lucide-react";
 
 export default function ViewItineraryPage() {
   const { id } = useParams();
@@ -36,6 +38,7 @@ export default function ViewItineraryPage() {
   const [inviteMsg, setInviteMsg] = useState("");
   const [inviteSending, setInviteSending] = useState(false);
   const [inviteStatus, setInviteStatus] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     fetch(`/api/itinerary/${id}`)
@@ -94,8 +97,19 @@ export default function ViewItineraryPage() {
     setInviteSending(false);
   };
 
+  const handleDownloadPdf = async () => {
+    setIsDownloading(true);
+    try {
+      await downloadPdf("itinerary-content", `${trip.title.replace(/\s+/g, '-').toLowerCase()}-itinerary.pdf`);
+    } catch (error) {
+      console.error("Failed to download PDF", error);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#FAFAF8] pb-24">
+    <div id="itinerary-content" className="min-h-screen bg-[#FAFAF8] pb-24">
       {/* HERO */}
       <div className="relative h-64 overflow-hidden rounded-b-3xl">
         <Image
@@ -123,6 +137,7 @@ export default function ViewItineraryPage() {
           <div className="flex flex-wrap gap-2 text-sm font-medium">
             <button
               onClick={() => setIsInviteOpen(true)}
+              data-html2canvas-ignore="true"
               className="flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2 text-white backdrop-blur-md transition-colors hover:bg-white/20 border border-white/20"
             >
               <UserPlus className="size-4" />
@@ -131,15 +146,33 @@ export default function ViewItineraryPage() {
 
             <button
               onClick={() => setIsChatOpen(true)}
+              data-html2canvas-ignore="true"
               className="flex items-center gap-2 rounded-xl bg-indigo-600/90 px-4 py-2 text-white backdrop-blur-md transition-colors hover:bg-indigo-500 border border-indigo-500/50 shadow-lg shadow-indigo-500/20"
             >
               <MessageCircle className="size-4" />
               Group Chat
             </button>
 
-            <button className="flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2 text-white backdrop-blur-md transition-colors hover:bg-white/20 border border-white/20">
+            <button 
+              data-html2canvas-ignore="true"
+              className="flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2 text-white backdrop-blur-md transition-colors hover:bg-white/20 border border-white/20"
+            >
               <Share2 className="size-4" />
               Share
+            </button>
+
+            <button
+              onClick={handleDownloadPdf}
+              disabled={isDownloading}
+              data-html2canvas-ignore="true"
+              className="flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2 text-white backdrop-blur-md transition-colors hover:bg-white/20 border border-white/20 disabled:opacity-50"
+            >
+              {isDownloading ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <Download className="size-4" />
+              )}
+              Download PDF
             </button>
           </div>
         </div>
