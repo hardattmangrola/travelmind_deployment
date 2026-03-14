@@ -57,7 +57,7 @@ TravelMind aims to transform traditional travel search into an intelligent plann
 * [Research & References](#research--references)
 * [Development Workflow](#development-workflow)
 * [Contribution Guide](#contribution-guide)
-* [License](#license)
+* [Connect with Us](#connect-with-us)
 
 ---
 
@@ -725,10 +725,59 @@ git commit -m "feat: implement recommendation engine"
 
 ---
 
-# License
+# 🤝 Connect With Us
 
-This project is open-source and available under the **MIT License**.
+> Interested in our work? We'd love to connect. Whether it's for internships, collaborations, or hiring — feel free to reach out to any of us.
 
----
+<h3 align="center">Team Nexus</h3>
 
-If you find this project useful, consider giving it a star!
+<table align="center">
+<tr>
+<th></th>
+<th>Vruxak Patel</th>
+<th>Hardattsinh Mangrola</th>
+<th>Shivang Pandya</th>
+<th>Bhavya Mishra</th>
+</tr>
+
+<tr>
+<td><b>Role</b></td>
+<td>Team Leader · Frontend Developer</td>
+<td>Backend Developer · ML Engineer</td>
+<td>Full Stack Developer</td>
+<td>UI/UX Designer · ML Engineer</td>
+</tr>
+
+<tr>
+<td><b>LinkedIn</b></td>
+<td>
+
+[![VRUXAK](https://img.shields.io/badge/VRUXAK-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/vruxak-patel/)
+
+</td>
+<td>
+
+[![HARDATT](https://img.shields.io/badge/HARDATT-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hardattsinhmangrola/)
+
+</td>
+<td>
+
+[![SHIVANG](https://img.shields.io/badge/SHIVANG-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/shivang-pandya-72837927b/)
+
+</td>
+<td>
+
+[![BHAVYA](https://img.shields.io/badge/BHAVYA-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/-bhavyamishra/)
+
+</td>
+</tr>
+
+<tr>
+<td><b>University</b></td>
+<td>Nirma University</td>
+<td>Nirma University</td>
+<td>Nirma University</td>
+<td>Nirma University</td>
+</tr>
+
+</table>
