@@ -15,31 +15,47 @@ export async function POST(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { pollId } = await params;
+    const { id, pollId } = await params;
     const { optionId } = await req.json();
 
     if (!optionId) {
       return NextResponse.json({ error: "Option ID is required" }, { status: 400 });
     }
 
-    // Upsert vote for this user on this poll
-    // Users can only vote once per poll due to the @@unique([pollId, userId]) constraint
-    const vote = await prisma.vote.upsert({
-      where: {
-        pollId_userId: {
-          pollId,
-          userId: session.user.id,
-        },
-      },
-      update: {
-        optionId,
-      },
-      create: {
-        pollId,
-        optionId,
-        userId: session.user.id,
-      },
-    });
+    const optionRows = await prisma.$queryRaw<
+      Array<{ id: string; pollId: string; itineraryId: string }>
+    >`
+      SELECT
+        o.id,
+        o."pollId" as "pollId",
+        p."itineraryId" as "itineraryId"
+      FROM poll_option o
+      JOIN poll p ON p.id = o."pollId"
+      WHERE o.id = ${optionId}
+        AND o."pollId" = ${pollId}
+      LIMIT 1
+    `;
+
+    const option = optionRows[0];
+    if (!option) {
+      return NextResponse.json({ error: "Invalid option for poll" }, { status: 400 });
+    }
+
+    if (option.itineraryId !== id) {
+      return NextResponse.json({ error: "Poll does not belong to this itinerary" }, { status: 400 });
+    }
+
+    const upsertedVote = await prisma.$queryRaw<
+      Array<{ id: string; pollId: string; optionId: string; userId: string; createdAt: Date }>
+    >`
+      INSERT INTO vote ("pollId", "optionId", "userId")
+      VALUES (${pollId}, ${optionId}, ${session.user.id})
+      ON CONFLICT ("pollId", "userId")
+      DO UPDATE SET "optionId" = EXCLUDED."optionId"
+      RETURNING id, "pollId" as "pollId", "optionId" as "optionId", "userId" as "userId", "createdAt" as "createdAt"
+    `;
+
+    const vote = upsertedVote[0];
 
     return NextResponse.json(vote);
   } catch (error) {

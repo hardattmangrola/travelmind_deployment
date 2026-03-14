@@ -116,7 +116,7 @@ export function Sidebar() {
 
   // Fetch user plan
   useEffect(() => {
-    fetch("/api/user/plan")
+    fetch("/api/user/plan", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : { plan: "basic" }))
       .then((data) => setUserPlan(data.plan || "basic"))
       .catch(() => { });

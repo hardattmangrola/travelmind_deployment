@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 const protectedPaths = [
   "/dashboard",
-  "/choose-plan",
   "/planner",
   "/search",
   "/wishlist",
@@ -37,7 +36,6 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/dashboard/:path*",
-    "/choose-plan/:path*",
     "/planner/:path*",
     "/search/:path*",
     "/wishlist/:path*",

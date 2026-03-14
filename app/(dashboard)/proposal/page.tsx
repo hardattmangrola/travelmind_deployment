@@ -188,14 +188,14 @@ export default function ProposalPage() {
 
   if (isGenerating || !generatedItinerary) {
     return (
-      <div className="flex min-h-[500px] flex-col items-center justify-center gap-4">
+      <div className="flex min-h-125 flex-col items-center justify-center gap-4 rounded-xl border border-(--color-border) bg-white px-6 py-14 shadow-(--shadow-sm)">
         <div className="relative">
-          <div className="h-16 w-16 animate-spin rounded-full border-4 border-indigo-200 border-t-indigo-600" />
-          <Sparkles className="absolute left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 text-indigo-600" />
+          <div className="h-16 w-16 animate-spin rounded-full border-4 border-[rgba(244,164,96,0.3)] border-t-primary" />
+          <Sparkles className="absolute left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 text-primary" />
         </div>
         <div className="text-center">
-          <p className="text-lg font-semibold text-slate-900">Crafting your perfect itinerary...</p>
-          <p className="mt-1 text-sm text-slate-500">This may take a moment while we gather data</p>
+          <p className="font-display text-lg font-semibold text-(--color-text-primary)">Crafting your perfect itinerary...</p>
+          <p className="mt-1 text-sm text-(--color-text-secondary)">This may take a moment while we gather data.</p>
         </div>
       </div>
     );
@@ -219,25 +219,27 @@ export default function ProposalPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-7">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <button
           onClick={() => router.push("/planner")}
-          className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700"
+          className="inline-flex items-center gap-2 rounded-lg border border-(--color-border) bg-white px-3 py-2 text-sm font-medium text-(--color-text-secondary) transition-colors duration-150 hover:bg-(--color-surface) hover:text-(--color-text-primary)"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Planner
         </button>
-        <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-700">
+        <span className="inline-flex items-center gap-1 rounded-full border border-[rgba(244,164,96,0.4)] bg-(--color-sand-light) px-3 py-1 text-xs font-semibold text-(--color-earth)">
+          <Sparkles className="h-3 w-3" />
           Draft Proposal
         </span>
       </div>
 
       {/* Trip Overview Card */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-700 p-6 text-white shadow-lg md:p-8">
-        <h1 className="text-2xl font-bold md:text-3xl">{itin.title}</h1>
-        <div className="mt-3 flex flex-wrap gap-4 text-sm text-indigo-100">
+      <div className="relative overflow-hidden rounded-xl border border-[rgba(244,164,96,0.35)] bg-linear-to-br from-[rgba(163,80,45,0.95)] to-[rgba(227,83,54,0.9)] p-6 text-white shadow-(--shadow-lg) md:p-8">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_15%,rgba(255,255,255,0.22),transparent_40%),radial-gradient(circle_at_88%_88%,rgba(255,255,255,0.14),transparent_36%)]" />
+        <h1 className="relative font-display text-2xl font-bold md:text-3xl">{itin.title}</h1>
+        <div className="relative mt-3 flex flex-wrap gap-4 text-sm text-white/90">
           <span className="flex items-center gap-1.5">
             <MapPin className="h-4 w-4" />
             {itin.destination}{itin.country ? `, ${itin.country}` : ""}
@@ -256,21 +258,21 @@ export default function ProposalPage() {
           </span>
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="relative mt-4 flex flex-wrap gap-2">
           {itin.cityInfo?.safetyScore && (
-            <span className="flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-xs">
+            <span className="flex items-center gap-1 rounded-full border border-white/25 bg-white/15 px-3 py-1 text-xs">
               <Shield className="h-3 w-3" />
               Safety: {itin.cityInfo.safetyScore}/10
             </span>
           )}
           {itin.weather?.[0] && (
-            <span className="flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-xs">
+            <span className="flex items-center gap-1 rounded-full border border-white/25 bg-white/15 px-3 py-1 text-xs">
               {itin.weather[0].condition === "Clear" ? <Sun className="h-3 w-3" /> : <Cloud className="h-3 w-3" />}
               {itin.weather[0].condition} {itin.weather[0].tempMax}°C
             </span>
           )}
           {itin.exchangeRate && (
-            <span className="flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-xs">
+            <span className="flex items-center gap-1 rounded-full border border-white/25 bg-white/15 px-3 py-1 text-xs">
               <DollarSign className="h-3 w-3" />
               1 USD = {itin.exchangeRate.toFixed(2)} {itin.currency}
             </span>
@@ -281,18 +283,18 @@ export default function ProposalPage() {
       {/* Weather */}
       {itin.weather && itin.weather.length > 0 && (
         <section>
-          <h2 className="mb-3 text-lg font-semibold text-slate-900">Weather Forecast</h2>
+          <h2 className="mb-3 font-display text-lg font-semibold text-(--color-text-primary)">Weather Forecast</h2>
           <div className="flex gap-3 overflow-x-auto pb-2">
             {itin.weather.slice(0, 7).map((w: any) => (
-              <div key={w.date} className="flex min-w-[100px] shrink-0 flex-col items-center rounded-xl border border-slate-200 bg-white p-3 text-center shadow-sm">
-                <span className="text-xs text-slate-500">
+              <div key={w.date} className="flex min-w-27 shrink-0 flex-col items-center rounded-lg border border-(--color-border) bg-white p-3 text-center shadow-(--shadow-xs)">
+                <span className="text-xs text-(--color-text-secondary)">
                   {new Date(w.date).toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short" })}
                 </span>
                 <span className="mt-1 text-lg">
                   {w.condition === "Clear" ? "☀️" : w.condition === "Rainy" ? "🌧️" : w.condition === "Partly Cloudy" ? "⛅" : "☁️"}
                 </span>
-                <span className="mt-1 text-xs font-medium text-slate-900">{w.tempMin}° – {w.tempMax}°</span>
-                <span className="text-[10px] text-slate-400">{w.condition}</span>
+                <span className="mt-1 text-xs font-semibold text-(--color-text-primary)">{w.tempMin}° - {w.tempMax}°</span>
+                <span className="text-[10px] text-(--color-text-tertiary)">{w.condition}</span>
               </div>
             ))}
           </div>
@@ -301,28 +303,28 @@ export default function ProposalPage() {
 
       {/* Day-by-Day Itinerary */}
       <section>
-        <h2 className="mb-4 text-lg font-semibold text-slate-900">Day-by-Day Itinerary</h2>
+        <h2 className="mb-4 font-display text-lg font-semibold text-(--color-text-primary)">Day-by-Day Itinerary</h2>
         <div className="space-y-4">
           {days.map((day: any, dayIndex: number) => (
-            <div key={dayIndex} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div key={dayIndex} className="rounded-xl border border-(--color-border) bg-white p-5 shadow-(--shadow-sm)">
               <div className="mb-3 flex items-center justify-between">
-                <h3 className="text-base font-semibold text-slate-900">
+                <h3 className="font-display text-base font-semibold text-(--color-text-primary)">
                   Day {day.day || dayIndex + 1}: {day.title || "Exploration"}
                 </h3>
-                {day.date && <span className="text-xs text-slate-400">{day.date}</span>}
+                {day.date && <span className="text-xs text-(--color-text-tertiary)">{day.date}</span>}
               </div>
               <div className="space-y-3">
                 {(day.activities || []).map((act: any, actIndex: number) => (
-                  <div key={actIndex} className="flex items-start gap-3 rounded-xl bg-slate-50 p-3">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-xs font-bold text-indigo-600">
+                  <div key={actIndex} className="flex items-start gap-3 rounded-lg border border-[rgba(244,164,96,0.22)] bg-(--color-surface) p-3">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-(--color-sand-light) text-xs font-bold text-(--color-earth)">
                       {act.time || `${9 + actIndex}:00`}
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-slate-800">{act.name}</p>
-                      {act.description && <p className="mt-0.5 text-xs text-slate-500">{act.description}</p>}
-                      <div className="mt-1 flex flex-wrap gap-2 text-[10px] text-slate-400">
+                      <p className="text-sm font-medium text-(--color-text-primary)">{act.name}</p>
+                      {act.description && <p className="mt-0.5 text-xs text-(--color-text-secondary)">{act.description}</p>}
+                      <div className="mt-1 flex flex-wrap gap-2 text-[10px] text-(--color-text-tertiary)">
                         {act.category && (
-                          <span className="rounded-full bg-white px-2 py-0.5 border border-slate-200">{act.category}</span>
+                          <span className="rounded-full border border-(--color-border) bg-white px-2 py-0.5">{act.category}</span>
                         )}
                         {act.duration && <span>{act.duration} min</span>}
                         {act.estimatedCost > 0 && <span>~₹{act.estimatedCost}</span>}
@@ -338,12 +340,12 @@ export default function ProposalPage() {
 
       {/* Hotels Section */}
       <section>
-        <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-900">
-          <Hotel className="h-5 w-5 text-amber-500" />
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold text-(--color-text-primary)">
+          <Hotel className="h-5 w-5 text-(--color-earth)" />
           Recommended Hotels
         </h2>
         {loadingExtras ? (
-          <div className="flex items-center gap-2 py-6 justify-center text-slate-500">
+          <div className="flex items-center justify-center gap-2 py-6 text-(--color-text-secondary)">
             <Loader2 className="h-5 w-5 animate-spin" />
             <span className="text-sm">Finding hotels...</span>
           </div>
@@ -357,9 +359,9 @@ export default function ProposalPage() {
                 <div
                   key={i}
                   onClick={() => router.push(`/hotels/${hotel.externalId || hotel.id}`)}
-                  className="group relative cursor-pointer overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-lg hover:border-indigo-200"
+                  className="group relative cursor-pointer overflow-hidden rounded-xl border border-(--color-border) bg-white shadow-(--shadow-xs) transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-[rgba(244,164,96,0.4)] hover:shadow-(--shadow-md)"
                 >
-                  <div className="h-36 w-full bg-slate-100 overflow-hidden">
+                  <div className="h-36 w-full overflow-hidden bg-(--color-surface)">
                     <img
                       src={hotel.images?.[0] || "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80"}
                       alt={hotel.name}
@@ -373,7 +375,7 @@ export default function ProposalPage() {
                     className={`absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full shadow-md transition ${
                       isWishlisted
                         ? "bg-rose-500 text-white"
-                        : "bg-white/90 text-slate-400 hover:text-rose-500 hover:bg-white"
+                        : "bg-white/90 text-(--color-text-tertiary) hover:bg-white hover:text-rose-500"
                     }`}
                   >
                     {isAdding ? (
@@ -383,18 +385,18 @@ export default function ProposalPage() {
                     )}
                   </button>
                   <div className="p-4">
-                    <h4 className="font-semibold text-slate-900 text-sm">{hotel.name}</h4>
+                    <h4 className="line-clamp-1 text-sm font-semibold text-(--color-text-primary)">{hotel.name}</h4>
                     {(hotel.city || hotel.description) && (
-                      <p className="mt-0.5 flex items-center gap-1 text-xs text-slate-500 line-clamp-1">
+                      <p className="mt-0.5 line-clamp-1 flex items-center gap-1 text-xs text-(--color-text-secondary)">
                         <MapPin className="h-3 w-3 shrink-0" /> {hotel.city || hotel.description}
                       </p>
                     )}
                     <div className="mt-2 flex items-center justify-between">
-                      <div className="flex items-center gap-1 text-xs text-amber-600">
-                        <Star className="h-3 w-3 fill-amber-400" />
+                      <div className="flex items-center gap-1 text-xs text-(--color-earth)">
+                        <Star className="h-3 w-3 fill-(--color-sand) text-(--color-sand)" />
                         {hotel.rating || hotel.stars || "4.0"}
                       </div>
-                      <span className="text-sm font-bold text-indigo-600">
+                      <span className="text-sm font-bold text-primary">
                         {hotel.pricePerNight ? `₹${hotel.pricePerNight}/night` : "View Details →"}
                       </span>
                     </div>
@@ -404,21 +406,21 @@ export default function ProposalPage() {
             })}
           </div>
         ) : (
-          <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 py-8 text-center">
-            <Hotel className="mx-auto h-8 w-8 text-slate-300" />
-            <p className="mt-2 text-sm text-slate-500">No hotels found. Try searching manually.</p>
+          <div className="rounded-xl border border-dashed border-(--color-border) bg-(--color-surface) py-8 text-center">
+            <Hotel className="mx-auto h-8 w-8 text-(--color-text-tertiary)" />
+            <p className="mt-2 text-sm text-(--color-text-secondary)">No hotels found. Try searching manually.</p>
           </div>
         )}
       </section>
 
       {/* Flights Section */}
       <section>
-        <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-900">
-          <Plane className="h-5 w-5 text-indigo-500" />
+        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-semibold text-(--color-text-primary)">
+          <Plane className="h-5 w-5 text-primary" />
           Available Flights
         </h2>
         {loadingExtras ? (
-          <div className="flex items-center gap-2 py-6 justify-center text-slate-500">
+          <div className="flex items-center justify-center gap-2 py-6 text-(--color-text-secondary)">
             <Loader2 className="h-5 w-5 animate-spin" />
             <span className="text-sm">Searching flights...</span>
           </div>
@@ -434,32 +436,32 @@ export default function ProposalPage() {
                   onClick={() => {
                     if (fId) router.push(`/flights/${fId}`);
                   }}
-                  className={`group flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-lg hover:border-indigo-200 ${fId ? "cursor-pointer" : ""}`}
+                  className={`group flex items-center gap-4 rounded-xl border border-(--color-border) bg-white p-4 shadow-(--shadow-xs) transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-[rgba(244,164,96,0.4)] hover:shadow-(--shadow-md) ${fId ? "cursor-pointer" : ""}`}
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 shrink-0">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-(--color-sand-light) text-(--color-earth)">
                     <Plane className="h-5 w-5" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-slate-900">
+                    <p className="text-sm font-semibold text-(--color-text-primary)">
                       {flight.airline?.name || flight.airline || "Airline"}
                     </p>
-                    <p className="mt-0.5 text-xs text-slate-500">
+                    <p className="mt-0.5 text-xs text-(--color-text-secondary)">
                       {flight.departure?.iata || flight.dep_iata || "—"} → {flight.arrival?.iata || flight.arr_iata || "—"}
                     </p>
-                    <div className="mt-1 flex items-center gap-3 text-xs text-slate-400">
+                    <div className="mt-1 flex items-center gap-3 text-xs text-(--color-text-tertiary)">
                       <span className="flex items-center gap-1">
                         <Clock className="h-3 w-3" />
                         {flight.departure?.scheduled?.slice(11, 16) || flight.dep_time || "—"}
                       </span>
                       <span>{fId || ""}</span>
-                      <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-600">
+                      <span className="rounded-full bg-[rgba(56,142,60,0.12)] px-2 py-0.5 text-[10px] font-medium text-[rgb(56,142,60)]">
                         {flight.status || "Scheduled"}
                       </span>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
                     <div className="text-right">
-                      <p className="text-lg font-bold text-indigo-600">
+                      <p className="text-lg font-bold text-primary">
                         {flight.price ? `₹${flight.price}` : "Check"}
                       </p>
                     </div>
@@ -470,7 +472,7 @@ export default function ProposalPage() {
                       className={`flex h-8 w-8 items-center justify-center rounded-full shadow-sm transition ${
                         isWishlisted
                           ? "bg-rose-500 text-white"
-                          : "bg-slate-50 text-slate-400 hover:text-rose-500 hover:bg-rose-50 border border-slate-200"
+                          : "border border-(--color-border) bg-(--color-surface) text-(--color-text-tertiary) hover:bg-[rgba(244,164,96,0.14)] hover:text-rose-500"
                       }`}
                     >
                       {isAdding ? (
@@ -485,26 +487,26 @@ export default function ProposalPage() {
             })}
           </div>
         ) : (
-          <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 py-8 text-center">
-            <Plane className="mx-auto h-8 w-8 text-slate-300" />
-            <p className="mt-2 text-sm text-slate-500">No flights found for this route.</p>
+          <div className="rounded-xl border border-dashed border-(--color-border) bg-(--color-surface) py-8 text-center">
+            <Plane className="mx-auto h-8 w-8 text-(--color-text-tertiary)" />
+            <p className="mt-2 text-sm text-(--color-text-secondary)">No flights found for this route.</p>
           </div>
         )}
       </section>
 
       {/* Action Buttons */}
-      <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="flex flex-wrap items-center gap-3 rounded-xl border border-(--color-border) bg-white p-5 shadow-(--shadow-sm)">
         <button
           onClick={handleAccept}
           disabled={saving}
-          className="flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow transition hover:bg-indigo-500 disabled:opacity-60"
+          className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-white shadow-(--shadow-xs) transition-colors duration-150 hover:bg-(--color-primary-hover) disabled:opacity-60"
         >
-          {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+          {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
           Accept & Create Trip
         </button>
         <button
           onClick={() => router.push("/planner")}
-          className="flex items-center gap-2 rounded-xl border border-slate-200 px-6 py-3 text-sm font-medium text-slate-600 transition hover:bg-slate-50"
+          className="inline-flex items-center gap-2 rounded-lg border border-(--color-border) bg-(--color-surface) px-6 py-3 text-sm font-medium text-(--color-text-secondary) transition-colors duration-150 hover:bg-(--color-sand-light) hover:text-(--color-text-primary)"
         >
           Regenerate
         </button>

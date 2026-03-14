@@ -38,6 +38,14 @@ const popularDestinations = [
   { name: "Santorini, Greece", image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=800&q=80", flag: "🇬🇷" },
 ];
 
+function toSlug(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-");
+}
+
 export default function DashboardPage() {
   const { data: session } = useSession();
   const router = useRouter();
@@ -251,9 +259,9 @@ export default function DashboardPage() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {popularDestinations.map((dest) => (
-            <button
+            <Link
               key={dest.name}
-              onClick={() => router.push(`/planner?destination=${encodeURIComponent(dest.name.split(",")[0])}`)}
+              href={`/dashboard/destination/${toSlug(dest.name.split(",")[0])}?city=${encodeURIComponent(dest.name.split(",")[0])}&country=${encodeURIComponent(dest.name.split(",")[1]?.trim() || "")}&image=${encodeURIComponent(dest.image)}&flag=${encodeURIComponent(dest.flag)}`}
               className="group relative overflow-hidden rounded-[var(--radius-md)] border border-[color:var(--color-border)] bg-[color:var(--color-white)] text-left shadow-[var(--shadow-sm)] transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
             >
               <img
@@ -267,7 +275,7 @@ export default function DashboardPage() {
                   {dest.flag} {dest.name}
                 </p>
               </div>
-            </button>
+            </Link>
           ))}
         </div>
       </motion.section>

@@ -17,10 +17,19 @@ export async function DELETE(
 
     const { id, pollId } = await params;
 
-    // Find the poll and verify the user is the creator
-    const poll = await prisma.poll.findUnique({
-      where: { id: pollId },
-    });
+    const polls = await prisma.$queryRaw<
+      Array<{ id: string; itineraryId: string; createdBy: string }>
+    >`
+      SELECT
+        p.id,
+        p."itineraryId" as "itineraryId",
+        p."createdBy" as "createdBy"
+      FROM poll p
+      WHERE p.id = ${pollId}
+      LIMIT 1
+    `;
+
+    const poll = polls[0];
 
     if (!poll) {
       return NextResponse.json({ error: "Poll not found" }, { status: 404 });
@@ -34,10 +43,10 @@ export async function DELETE(
       return NextResponse.json({ error: "Poll does not belong to this itinerary" }, { status: 400 });
     }
 
-    // Delete poll — cascades to options and votes
-    await prisma.poll.delete({
-      where: { id: pollId },
-    });
+    await prisma.$executeRaw`
+      DELETE FROM poll
+      WHERE id = ${pollId}
+    `;
 
     return NextResponse.json({ success: true });
   } catch (error) {
