@@ -27,6 +27,7 @@ import { Download } from "lucide-react";
 import { GroupVoting } from "@/components/itinerary/GroupVoting";
 import { TripCalendar } from "@/components/itinerary/TripCalendar";
 import { TripTimeline } from "@/components/itinerary/TripTimeline";
+import { ItineraryMapRegion } from "@/components/itinerary/ItineraryMapRegion";
 
 export default function ViewItineraryPage() {
   const { id } = useParams();
@@ -225,12 +226,7 @@ export default function ViewItineraryPage() {
           </div>
 
           <div className="lg:col-span-2 overflow-hidden rounded-2xl border border-[#E8E8E2] bg-white shadow-sm">
-            <div className="relative h-full min-h-[220px] w-full bg-slate-50 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:16px_16px]">
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-500">
-                <MapPin className="mb-2 size-8 text-indigo-500" />
-                <p className="font-medium text-slate-700">Interactive Map Region</p>
-              </div>
-            </div>
+            <ItineraryMapRegion itineraryId={id as string} destination={trip.destination} country={trip.country} />
           </div>
         </div>
 

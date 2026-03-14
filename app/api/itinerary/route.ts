@@ -155,7 +155,6 @@ Include 3-4 activities per day. Mix sightseeing, food, leisure.`;
     });
 
     return NextResponse.json({
-      id: itinerary.id,
       ...itinerary,
       weather,
       cityInfo,
