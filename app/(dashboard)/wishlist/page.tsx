@@ -1,115 +1,88 @@
 "use client";
 
-import { useState } from "react";
-import { Heart, Sparkles } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { WishlistCard } from "@/components/cards/WishlistCard";
-import { goaActivities } from "@/lib/placeholder-data";
-import { toast } from "sonner";
-import { AnimatePresence } from "framer-motion";
-import Link from "next/link";
+import { useState, useEffect } from "react";
+import { Heart, Loader2, Star, Trash2, Hotel, MapPin, Calendar, Plane } from "lucide-react";
 
-const TABS = ["All", "Hotels", "Activities", "Events"];
+interface WishlistItemData {
+  id: string;
+  type: string;
+  data: any;
+  addedAt: string;
+}
+
+const typeIcons: Record<string, any> = { hotel: Hotel, activity: MapPin, event: Calendar, flight: Plane };
 
 export default function WishlistPage() {
-  const [activeTab, setActiveTab] = useState("All");
-  const [items, setItems] = useState(goaActivities.slice(0, 5));
+  const [items, setItems] = useState<WishlistItemData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [filter, setFilter] = useState("all");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const handleRemove = (id: string) => {
-    // Optimistically remove the item
-    const itemToRemove = items.find(i => i.id === id);
-    setItems(items.filter(item => item.id !== id));
-    
-    toast("Removed from wishlist", {
-      action: {
-        label: "Undo",
-        onClick: () => {
-          if (itemToRemove) {
-            setItems(prev => [...prev, itemToRemove]);
-          }
-        },
-      },
-    });
+  useEffect(() => {
+    fetch("/api/wishlist")
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => { setItems(Array.isArray(data) ? data : []); setIsLoading(false); })
+      .catch(() => setIsLoading(false));
+  }, []);
+
+  const handleRemove = async (itemId: string) => {
+    setDeletingId(itemId);
+    try {
+      const res = await fetch(`/api/wishlist?id=${itemId}`, { method: "DELETE" });
+      if (res.ok) setItems((prev) => prev.filter((i) => i.id !== itemId));
+    } finally { setDeletingId(null); }
   };
 
-  const handleAddToItinerary = () => {
-    toast.success("Added to itinerary");
-  };
+  const filtered = filter === "all" ? items : items.filter((i) => i.type === filter);
 
   return (
-    <div className="min-h-screen bg-[#FAFAF8] pb-12">
-      {/* HEADER */}
-      <div className="flex flex-col gap-4 px-6 pt-8 sm:flex-row sm:items-center sm:justify-between lg:px-12">
-        <div>
-          <div className="flex items-center gap-3">
-            <Heart className="size-8 text-[#4F46E5]" />
-            <h1 className="font-display text-5xl font-bold text-[#111111]">My Wishlist</h1>
-          </div>
-          <p className="mt-2 text-sm text-[#6B7280]">
-            {items.length} items saved
-          </p>
-        </div>
-        <button className="tm-btn-primary flex h-fit items-center gap-2 px-5 py-2.5">
-          <Sparkles className="size-4" />
-          Create Trip from Wishlist
-        </button>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900">My Wishlist</h1>
+        <p className="mt-1 text-sm text-slate-500">{items.length} saved item{items.length !== 1 ? "s" : ""}</p>
       </div>
 
-      {/* TAB BAR */}
-      <div className="mt-6 border-b border-[#E8E8E2] px-6 lg:px-12">
-        <div className="flex gap-6 overflow-x-auto scrollbar-hide">
-          {TABS.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              data-active={activeTab === tab}
-              className={cn(
-                "tm-tab whitespace-nowrap px-1 pb-3",
-                activeTab === tab
-                  ? "border-b-[#4F46E5] text-[#111111]"
-                  : "text-[#6B7280]"
-              )}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
+      <div className="flex gap-2">
+        {["all", "hotel", "activity", "event", "flight"].map((tab) => (
+          <button key={tab} onClick={() => setFilter(tab)}
+            className={`rounded-full border px-4 py-1.5 text-xs font-medium transition ${filter === tab ? "border-indigo-500 bg-indigo-50 text-indigo-700" : "border-slate-200 bg-white text-slate-500 hover:border-slate-300"}`}>
+            {tab === "all" ? "All" : tab.charAt(0).toUpperCase() + tab.slice(1) + "s"}
+          </button>
+        ))}
       </div>
 
-      {/* CONTENT */}
-      {items.length === 0 ? (
-        <div className="mt-24 flex flex-col items-center justify-center px-6 text-center">
-          <Heart className="size-20 text-slate-200" />
-          <h2 className="mt-4 text-xl font-semibold text-slate-900">
-            Nothing saved yet
-          </h2>
-          <p className="mt-2 text-[#6B7280]">
-            Start exploring and save items you love
-          </p>
-          <Link 
-            href="/search"
-            className="tm-btn-outline mt-6 px-6 py-2.5 text-[#4F46E5]"
-          >
-            Explore Activities
-          </Link>
+      {isLoading ? (
+        <div className="flex flex-col items-center py-16">
+          <Loader2 className="h-6 w-6 animate-spin text-indigo-600" />
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="flex flex-col items-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 py-12 text-center">
+          <Heart className="h-8 w-8 text-slate-300" />
+          <h3 className="mt-3 text-sm font-semibold text-slate-600">No wishlist items yet</h3>
+          <p className="mt-1 text-xs text-slate-400">Save hotels, activities, and more while planning</p>
         </div>
       ) : (
-        <div className="mt-6 px-6 pb-8 lg:px-12">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <AnimatePresence>
-              {items.map((activity) => (
-                <div key={activity.id} className="flex justify-center">
-                  <WishlistCard
-                    activity={activity}
-                    savedDate="Jan 10"
-                    votes={0}
-                    onRemove={() => handleRemove(activity.id)}
-                    onAddToItinerary={handleAddToItinerary}
-                  />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {filtered.map((item) => {
+            const data = typeof item.data === "string" ? JSON.parse(item.data) : item.data;
+            const Icon = typeIcons[item.type] || MapPin;
+            return (
+              <div key={item.id} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md">
+                <div className="relative h-32">
+                  <img src={data.image || data.images?.[0] || "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&q=60"} alt={data.name || "Item"} className="h-full w-full object-cover" />
+                  <span className="absolute top-2 left-2 flex items-center gap-1 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-medium text-slate-700 shadow-sm"><Icon className="h-3 w-3" />{item.type}</span>
+                  <button onClick={() => handleRemove(item.id)} disabled={deletingId === item.id} className="absolute top-2 right-2 rounded-full bg-white/90 p-1.5 text-rose-500 shadow-sm opacity-0 group-hover:opacity-100 hover:bg-rose-50">
+                    {deletingId === item.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
+                  </button>
                 </div>
-              ))}
-            </AnimatePresence>
-          </div>
+                <div className="p-4">
+                  <h3 className="text-sm font-semibold text-slate-900">{data.name || "Saved Item"}</h3>
+                  {data.city && <p className="mt-0.5 text-xs text-slate-500">{data.city}</p>}
+                  {data.rating && <div className="mt-2 flex items-center gap-1 text-xs text-amber-600"><Star className="h-3 w-3 fill-amber-400" />{data.rating.toFixed(1)}</div>}
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

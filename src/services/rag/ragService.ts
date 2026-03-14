@@ -12,7 +12,7 @@ export class RagService {
 
   constructor() {
     this.llm = new ChatGoogleGenerativeAI({
-      model: 'gemini-1.5-flash', // High speed, free tier available
+      model: 'gemini-2.0-flash',
       temperature: 0,
       apiKey: process.env.GOOGLE_API_KEY || 'dummy-key-for-build',
     });
