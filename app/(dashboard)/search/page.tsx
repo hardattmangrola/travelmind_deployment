@@ -24,16 +24,16 @@ const ActivityMap = dynamic(() => import("@/components/map/ActivityMap"), {
 interface Activity {
   id: string;
   name: string;
-  city: string;
-  category: string;
-  price: number;
-  currency: string;
-  duration: number;
-  rating: number;
-  image: string;
-  description: string;
   lat: number;
   lng: number;
+  category: string;
+  city?: string;
+  price?: number;
+  currency?: string;
+  duration?: number;
+  rating?: number;
+  image?: string;
+  description?: string;
 }
 
 const categories = ["All", "culture", "beach", "restaurant", "museum", "adventure", "nightlife", "shopping", "nature", "wellness"];
