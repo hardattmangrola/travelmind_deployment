@@ -3,6 +3,10 @@
 </h1>
 
 <p align="center">
+  <strong>Live Demo:</strong> <a href="https://travelmind-deployment.vercel.app/">travelmind-deployment.vercel.app</a>
+</p>
+
+<p align="center">
 <strong>Intelligent AI Travel Planning Platform</strong><br>
 Discover destinations, generate AI-powered itineraries, and collaborate on trips seamlessly.
 </p>
@@ -43,21 +47,21 @@ TravelMind aims to transform traditional travel search into an intelligent plann
 
 # Table of Contents
 
-* [Team Details](#team-details)
-* [Technology Stack](#technology-stack)
-* [Entity Relation Diagram](#er-diagram)
-* [Low Fidelity Design](#low-fidelity-design)
-* [Project Structure](#project-structure)
-* [Getting Started](#getting-started)
-* [Environment Variables](#environment-variables)
-* [Database Setup](#database-setup)
-* [Authentication System](#authentication-system)
-* [RAG (Retrieval Augmented Generation) Pipeline](#rag-retrieval-augmented-generation-pipeline)
-* [Future AI Modules](#future-ai-modules)
-* [Research & References](#research--references)
-* [Development Workflow](#development-workflow)
-* [Contribution Guide](#contribution-guide)
-* [Connect with Us](#connect-with-us)
+1. [Team Details](#team-details)
+2. [Technology Stack](#technology-stack)
+3. [Entity Relation Diagram](#er-diagram)
+4. [Low Fidelity Design](#low-fidelity-design)
+5. [Project Structure](#project-structure)
+6. [Getting Started](#getting-started)
+7. [Environment Variables](#environment-variables)
+8. [Database Setup](#database-setup)
+9. [Authentication System](#authentication-system)
+10. [RAG (Retrieval Augmented Generation) Pipeline](#rag-retrieval-augmented-generation-pipeline)
+11. [Future AI Modules](#future-ai-modules)
+12. [Research & References](#research--references)
+13. [Development Workflow](#development-workflow)
+14. [Contribution Guide](#contribution-guide)
+15. [Connect with Us](#connect-with-us)
 
 ---
 
@@ -65,7 +69,7 @@ TravelMind aims to transform traditional travel search into an intelligent plann
 
 | Name | Role | Email | University |
 |-----|-----|-----|-----|
-| **Vruxak Patel** | Team Leader · Frontend Developer | 23bce252@nirmauni.ac.in | Nirma University |
+| **Vruxak Patel (Team Leader)** | Frontend Developer | 23bce252@nirmauni.ac.in | Nirma University |
 | **Hardattsinh Mangrola** | Backend Developer · ML Engineer | hardattmangrola@gmail.com | Nirma University |
 | **Shivang Pandya** | Full Stack Developer | shivangpandya6212@gmail.com | Nirma University |
 | **Bhavya Mishra** | UI/UX Designer · ML Engineer | bhavyamishra2873@gmail.com | Nirma University |
@@ -164,6 +168,8 @@ TravelMind aims to transform traditional travel search into an intelligent plann
 
 ![ER Diagram](https://raw.githubusercontent.com/Vruxak21/Breach26/4f43e137a600c20391696436ed1d2f3c4663c700/assests/er_diagram.png)
 
+Detailed entity mappings, Eraser.io AI prompts, and DSL code can be found in [schema.md](schema.md).
+
 # Low Fidelity Design
 
 During the brainstorming phase, we mapped the complete user journey and created **low-fidelity wireframes** on Figma to validate the product flow before starting development. After multiple iterations, we finalized **11 core screens** covering authentication, dashboard, trip planning, collaboration, AI planning, and wishlist.
@@ -182,26 +188,19 @@ These wireframes helped us quickly validate **navigation flow, feature placement
 ```
 breach26/
 │
-├── app/                     # Next.js App Router
-│   ├── api/                 # API routes
-│   ├── signin/              # Login page
-│   ├── signup/              # Signup page
-│
-├── components/              # Reusable UI components
-│
-├── lib/
-│   ├── auth.ts              # Server authentication config
-│   ├── auth-client.ts       # Client authentication utilities
+├── app/                     # Next.js App Router (Pages & API)
+├── components/              # Reusable UI components & shadcn primitives
+├── hooks/                   # Custom React hooks
+├── lib/                     # Core business logic & shared utilities
+│   ├── auth.ts              # Authentication configuration
 │   ├── db.ts                # Prisma database client
-│   └── rag/                 # RAG pipeline modules
-│
-├── prisma/
-│   ├── schema.prisma
-│   └── migrations/
-│
-├── public/
-│
-└── README.md
+│   └── rag/                 # RAG & AI pipeline implementation
+├── prisma/                  # Database schema & migrations
+├── public/                  # Static assets & images
+├── src/                     # Source code (Repositiories, Scripts, Services)
+├── schema.md                # ER Diagram prompts & DSL for Eraser.io
+├── technology.md            # Detailed technology stack documentation
+└── README.md                # Project documentation
 ```
 
 ---
@@ -235,17 +234,32 @@ Create a `.env` file in the root directory.
 # Database
 DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
 
-# Better Auth
+# Authentication (Better Auth)
 BETTER_AUTH_SECRET="your_long_random_secret"
 BETTER_AUTH_URL="http://localhost:3000"
 
-# OAuth Provider
+# OAuth Providers
 GOOGLE_CLIENT_ID="your_google_client_id"
 GOOGLE_CLIENT_SECRET="your_google_client_secret"
 
-# AI Services
+# AI & Vector Services
+GOOGLE_API_KEY="your_google_gemini_api_key"
+PINECONE_API_KEY="your_pinecone_api_key"
+PINECONE_INDEX_NAME="travelmind-index"
 HUGGINGFACE_API_KEY="your_huggingface_key"
 OPENAI_API_KEY="your_openai_key"
+
+# External Data APIs
+LITEAPI_API_KEY="your_liteapi_key"
+GEOAPIFY_API_KEY="your_geoapify_key"
+ORS_API_KEY="your_openrouteservice_key"
+PREDICTHQ_ACCESS_TOKEN="your_predicthq_token"
+AVIATIONSTACK_API_KEY="your_aviationstack_key"
+
+# Payment Services (Stripe)
+STRIPE_PUBLISHABLE_KEY="pk_test_..."
+STRIPE_SECRET_KEY="sk_test_..."
+STRIPE_WEBHOOK_SECRET="whsec_..."
 ```
 
 Generate a secure auth secret:
@@ -734,7 +748,7 @@ git commit -m "feat: implement recommendation engine"
 <table align="center">
 <tr>
 <th></th>
-<th>Vruxak Patel</th>
+<th>Vruxak Patel (Team Leader)</th>
 <th>Hardattsinh Mangrola</th>
 <th>Shivang Pandya</th>
 <th>Bhavya Mishra</th>
@@ -742,7 +756,7 @@ git commit -m "feat: implement recommendation engine"
 
 <tr>
 <td><b>Role</b></td>
-<td>Team Leader · Frontend Developer</td>
+<td>Frontend Developer</td>
 <td>Backend Developer · ML Engineer</td>
 <td>Full Stack Developer</td>
 <td>UI/UX Designer · ML Engineer</td>
