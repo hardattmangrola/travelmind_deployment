@@ -1,14 +1,10 @@
-<h1 align="center">TravelMind</h1>
+<h1 align="center">
+  <span style="color:#2563EB;">TravelMind</span>
+</h1>
 
 <p align="center">
 <strong>Intelligent AI Travel Planning Platform</strong><br>
-Plan smarter trips with AI-powered recommendations, collaborative itineraries, and real-time insights.
-</p>
-
-<p align="center">
-<img src="https://img.shields.io/badge/AI-RAG%20Powered-blue?style=for-the-badge"/>
-<img src="https://img.shields.io/badge/Stack-Next.js%20%7C%20PostgreSQL%20%7C%20AI-black?style=for-the-badge"/>
-<img src="https://img.shields.io/badge/Status-Active%20Development-success?style=for-the-badge"/>
+A modern platform for discovering destinations, generating AI-powered itineraries, and collaborating on trips in real time.
 </p>
 
 <hr/>
@@ -16,32 +12,57 @@ Plan smarter trips with AI-powered recommendations, collaborative itineraries, a
 <h2>Overview</h2>
 
 <p>
-<strong>TravelMind</strong> is a sophisticated AI-powered travel planning platform designed to transform how travelers discover, plan, and collaborate on their journeys. Built using a high-performance full-stack architecture and modern AI infrastructure, the platform delivers an end-to-end experience from inspiration to itinerary management.
+<strong style="color:#2563EB;">TravelMind</strong> is an advanced AI-powered travel planning platform designed to transform how travelers discover destinations, organize itineraries, and collaborate on trips. Built using a modern full-stack architecture, the platform provides a seamless experience from initial inspiration to structured trip planning.
 </p>
 
 <p>
-By integrating <strong>Retrieval-Augmented Generation (RAG)</strong> and personalized recommendation engines, TravelMind converts static travel data into dynamic, context-aware insights tailored to each user's preferences and travel behavior.
+By integrating <strong>Retrieval-Augmented Generation (RAG)</strong> and intelligent recommendation systems, TravelMind converts static travel data into dynamic, context-aware insights tailored to each user's preferences, interests, and travel patterns.
 </p>
 
 <hr/>
 
 <h2>Key Capabilities</h2>
 
-<ul>
-<li><strong>AI-Powered Discovery</strong> — Retrieval-Augmented Generation enables contextual travel insights.</li>
-<li><strong>Personalized Recommendations</strong> — Intelligent systems adapt suggestions based on user behavior and preferences.</li>
-<li><strong>Smart Itinerary Planning</strong> — Automatically generate structured travel plans with optimized destinations and activities.</li>
-<li><strong>Collaborative Planning</strong> — Users can plan trips together using shared itineraries and recommendations.</li>
-<li><strong>Scalable Modern Architecture</strong> — Built using Next.js, PostgreSQL, vector databases, and AI integrations.</li>
-</ul>
+<table>
+<tr>
+<td width="50%">
+
+<strong style="color:#2563EB;">AI-Driven Discovery</strong><br>
+RAG-based intelligence surfaces contextual travel insights and destination recommendations.
+
+</td>
+<td width="50%">
+
+<strong style="color:#10B981;">Personalized Recommendations</strong><br>
+Adaptive algorithms suggest destinations and experiences aligned with user interests.
+
+</td>
+</tr>
+
+<tr>
+<td width="50%">
+
+<strong style="color:#F59E0B;">Smart Itinerary Generation</strong><br>
+Automatically generates structured travel plans with optimized activities and locations.
+
+</td>
+<td width="50%">
+
+<strong style="color:#8B5CF6;">Collaborative Planning</strong><br>
+Users can build and manage trips together using shared itineraries and planning tools.
+
+</td>
+</tr>
+
+</table>
 
 <hr/>
 
 <h2>Vision</h2>
 
 <p>
-TravelMind aims to transform traditional travel search into an intelligent planning experience where AI acts as a personalized travel assistant. The platform enables users to explore destinations, optimize itineraries, and uncover travel opportunities tailored specifically to them.
-</p>.
+<strong style="color:#2563EB;">TravelMind</strong> aims to redefine travel planning by turning traditional search into an intelligent, AI-assisted experience. The platform acts as a digital travel companion that helps users explore destinations, organize trips efficiently, and discover unique travel opportunities tailored specifically to them.
+</p>
 
 ---
 
