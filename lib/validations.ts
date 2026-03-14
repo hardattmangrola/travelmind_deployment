@@ -7,19 +7,16 @@ const dateStringSchema = z
 export const tripIntentSchema = z
   .object({
     destination: z.string().min(2).max(120),
-    country: z.string().min(2).max(80),
-    startDate: dateStringSchema,
-    endDate: dateStringSchema,
-    budget: z.number().positive().max(10_000_000),
-    currency: z.string().length(3).toUpperCase(),
-    travelers: z.number().int().min(1).max(20),
-    travelStyle: z.enum(["relaxed", "adventure", "cultural", "luxury", "budget"]),
-    interests: z.array(z.string().min(2)).min(1).max(12),
-    budgetRange: z.enum(["under-10k", "10k-30k", "30k-60k", "60k-1L", "above-1L"]),
-  })
-  .refine((value) => new Date(value.endDate) >= new Date(value.startDate), {
-    path: ["endDate"],
-    message: "End date must be after start date",
+    description: z.string().max(1000).optional().default(""),
+    country: z.string().max(80).optional().default(""),
+    startDate: dateStringSchema.optional(),
+    endDate: dateStringSchema.optional(),
+    budget: z.number().positive().max(10_000_000).optional().default(50000),
+    currency: z.string().min(1).max(5).toUpperCase().optional().default("INR"),
+    travelers: z.number().int().min(1).max(20).optional().default(2),
+    travelStyle: z.string().optional().default("balanced"),
+    interests: z.array(z.string()).optional().default([]),
+    budgetRange: z.string().optional(),
   });
 
 export const searchQuerySchema = z.object({

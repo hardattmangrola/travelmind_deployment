@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Home,
@@ -14,6 +14,8 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { cn } from "@/lib/utils";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { useSession } from "@/lib/auth-client";
+import { useEffect } from "react";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -28,12 +30,28 @@ const bottomNavItems = [
 ] as const;
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  // Placeholder auth gate; to be wired with Better Auth
-  const isAuthenticated = true;
+  const { data: session, isPending } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
 
-  if (!isAuthenticated) {
-    // In a later phase, redirect to /signin when unauthenticated
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.push("/signin");
+    }
+  }, [isPending, session, router]);
+
+  if (isPending) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
+          <p className="text-sm text-slate-500">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!session) {
     return null;
   }
 
@@ -98,4 +116,3 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     </SidebarProvider>
   );
 }
-

@@ -1,8 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../lib/generated/prisma"
@@ -10,11 +8,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-}
-
-model Test {
-  id   String @id @default(uuid())
-  name String
 }
 
 model User {
@@ -27,6 +20,14 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+
+  itineraries          Itinerary[]
+  wishlistItems        WishlistItem[]
+  collaborations       ItineraryCollaborator[]
+  bookings             Booking[]
+  sentMessages         Message[]    @relation("MessageSender")
+  sentInvitations      Invitation[] @relation("InvitationSender")
+  receivedInvitations  Invitation[] @relation("InvitationReceiver")
 
   @@unique([email])
   @@map("user")
@@ -78,4 +79,131 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+// ─── Domain Models ───────────────────────────────────────────
+
+model Itinerary {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title       String
+  destination String
+  country     String
+  coverImage  String   @default("https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1400&q=90")
+  startDate   String
+  endDate     String
+  totalDays   Int
+  totalBudget Float
+  currency    String   @default("INR")
+  travelers   Int      @default(2)
+  travelStyle String   @default("relaxed")
+  days        Json     @default("[]")
+  shareToken  String   @unique @default(uuid())
+  status      String   @default("draft")
+
+  wishlistItems   WishlistItem[]
+  collaborators   ItineraryCollaborator[]
+  bookings        Booking[]
+  messages        Message[]
+  invitations     Invitation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([shareToken])
+  @@map("itinerary")
+}
+
+model WishlistItem {
+  id             String   @id @default(uuid())
+  itineraryId    String?
+  itinerary      Itinerary? @relation(fields: [itineraryId], references: [id], onDelete: SetNull)
+  addedByUserId  String
+  addedByUser    User     @relation(fields: [addedByUserId], references: [id], onDelete: Cascade)
+
+  type           String   // hotel | activity | event | flight
+  externalId     String?
+  data           Json     // snapshot of item at time of saving
+  votes          Json     @default("[]")
+
+  addedAt        DateTime @default(now())
+
+  @@index([addedByUserId])
+  @@index([itineraryId])
+  @@map("wishlist_item")
+}
+
+model ItineraryCollaborator {
+  id          String    @id @default(uuid())
+  itineraryId String
+  itinerary   Itinerary @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role        String    @default("viewer") // owner | editor | viewer
+
+  createdAt   DateTime  @default(now())
+
+  @@unique([itineraryId, userId])
+  @@index([userId])
+  @@map("itinerary_collaborator")
+}
+
+model Booking {
+  id              String    @id @default(uuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  itineraryId     String
+  itinerary       Itinerary @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
+
+  itemType        String    // hotel | activity | event
+  itemData        Json
+  amount          Float
+  currency        String    @default("INR")
+  status          String    @default("pending") // pending | confirmed | cancelled
+  stripeSessionId String?
+
+  createdAt       DateTime  @default(now())
+
+  @@index([userId])
+  @@index([itineraryId])
+  @@map("booking")
+}
+
+model Message {
+  id          String    @id @default(uuid())
+  itineraryId String
+  itinerary   Itinerary @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
+  senderId    String
+  sender      User      @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  text        String
+  
+  createdAt   DateTime  @default(now())
+
+  @@index([itineraryId])
+  @@index([senderId])
+  @@map("message")
+}
+
+model Invitation {
+  id            String    @id @default(uuid())
+  itineraryId   String
+  itinerary     Itinerary @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
+  senderId      String
+  sender        User      @relation("InvitationSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverEmail String
+  receiverId    String?
+  receiver      User?     @relation("InvitationReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  role          String    @default("editor")
+  status        String    @default("pending") // pending | accepted | declined
+  message       String?
+
+  createdAt     DateTime  @default(now())
+
+  @@index([receiverEmail])
+  @@index([receiverId])
+  @@index([itineraryId])
+  @@map("invitation")
 }

@@ -1,151 +1,105 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
+import { useState, useEffect } from "react";
+import { useSession } from "@/lib/auth-client";
+import { Calendar, Map, MapPin, Plane, Star, Users } from "lucide-react";
 import Link from "next/link";
-import { ArrowRight, Clock, CreditCard, Globe2, Plane } from "lucide-react";
-import { sampleTrips } from "@/lib/placeholder-data";
-import { formatCurrency } from "@/lib/utils";
 
-const TABS = ["Upcoming", "Completed", "Shared with me", "Bookings"];
+interface Trip {
+  id: string;
+  title: string;
+  destination: string;
+  country: string;
+  coverImage: string;
+  totalDays: number;
+  travelers: number;
+  status: string;
+  createdAt: string;
+}
 
 export default function ProfilePage() {
-  const [activeTab, setActiveTab] = useState("Upcoming");
-  const trips = sampleTrips;
+  const { data: session } = useSession();
+  const [trips, setTrips] = useState<Trip[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/itinerary/user")
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => { setTrips(Array.isArray(data) ? data : []); setIsLoading(false); })
+      .catch(() => setIsLoading(false));
+  }, []);
+
+  const user = session?.user;
+  const stats = {
+    totalTrips: trips.length,
+    countries: new Set(trips.map((t) => t.country)).size,
+    daysPlanned: trips.reduce((s, t) => s + t.totalDays, 0),
+  };
+
+  function getInitials(name: string) {
+    return name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
+  }
 
   return (
-    <div className="min-h-screen bg-[#FAFAF8] pb-24">
-      <div className="px-6 pt-8 lg:px-12">
-        <div className="rounded-3xl border border-[#E8E8E2] bg-white p-8 shadow-sm">
-          <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-start">
-            <div className="flex items-center gap-6">
-              <div className="flex size-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-700 text-2xl font-bold text-white shadow-md">
-                AK
-              </div>
-              <div>
-                <h1 className="font-display text-3xl font-bold text-[#111111]">Aisha Khan</h1>
-                <p className="mt-1 text-sm text-[#6B7280]">aisha.khan@example.com</p>
-                <p className="mt-1 text-xs text-[#9CA3AF]">Member since Jan 2024</p>
-                <div className="mt-5 flex flex-wrap gap-6">
-                  <div>
-                    <span className="text-xl font-bold text-[#111111]">12</span>
-                    <p className="text-xs font-medium text-[#6B7280]">Trips</p>
-                  </div>
-                  <div>
-                    <span className="text-xl font-bold text-[#111111]">8</span>
-                    <p className="text-xs font-medium text-[#6B7280]">Countries</p>
-                  </div>
-                  <div>
-                    <span className="text-xl font-bold text-[#111111]">INR 2.4L</span>
-                    <p className="text-xs font-medium text-[#6B7280]">Spent</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <button className="tm-btn-outline h-fit px-5 py-2.5">Edit Profile</button>
+    <div className="mx-auto max-w-3xl space-y-8">
+      {/* Profile Card */}
+      <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        {user?.image ? (
+          <img src={user.image} alt={user.name || ""} className="h-16 w-16 rounded-full object-cover" />
+        ) : (
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-indigo-600 text-lg font-bold text-white">
+            {getInitials(user?.name || "U")}
           </div>
+        )}
+        <div>
+          <h1 className="text-xl font-bold text-slate-900">{user?.name || "User"}</h1>
+          <p className="text-sm text-slate-500">{user?.email || ""}</p>
         </div>
       </div>
 
-      <div className="mt-8 border-b border-[#E8E8E2] px-6 lg:px-12">
-        <div className="scrollbar-hide flex gap-6 overflow-x-auto">
-          {TABS.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              data-active={activeTab === tab}
-              className="tm-tab"
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="mt-6 grid grid-cols-1 gap-4 px-6 lg:grid-cols-2 lg:px-12">
-        {trips.map((trip) => (
-          <Link
-            key={trip.id}
-            href={`/itinerary/${trip.id}/view`}
-            className="tm-card group flex items-center justify-between gap-4 p-4"
-          >
-            <div className="flex min-w-0 flex-1 items-center gap-4">
-              <div className="relative size-20 shrink-0 overflow-hidden rounded-xl">
-                <Image src={trip.coverImage} alt={trip.title} fill className="object-cover" sizes="80px" />
-              </div>
-
-              <div className="min-w-0 flex-1">
-                <h3 className="truncate font-semibold text-[#111111] transition-colors group-hover:text-[#4F46E5]">
-                  {trip.title}
-                </h3>
-                <p className="mt-0.5 truncate text-sm text-[#6B7280]">
-                  {trip.startDate} - {trip.endDate}
-                </p>
-                <div className="mt-2 flex items-center gap-3">
-                  <div className="flex -space-x-2">
-                    {trip.collaborators.slice(0, 3).map((c) => (
-                      <div
-                        key={c.id}
-                        className="flex size-6 items-center justify-center rounded-full border-2 border-white bg-slate-200 text-[8px] font-bold text-slate-700"
-                      >
-                        {c.name.charAt(0)}
-                      </div>
-                    ))}
-                  </div>
-                  <span className="rounded-full border border-emerald-100 bg-emerald-50 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-emerald-700">
-                    {trip.status}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex shrink-0 flex-col items-end gap-2">
-              <span className="font-bold text-[#111111]">{formatCurrency(trip.totalBudget, trip.currency)}</span>
-              <span className="flex items-center gap-1 rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700 transition group-hover:bg-indigo-600 group-hover:text-white">
-                View Trip <ArrowRight className="size-3" />
-              </span>
-            </div>
-          </Link>
+      {/* Stats */}
+      <div className="grid grid-cols-3 gap-4">
+        {[
+          { label: "Trips", value: stats.totalTrips, icon: Map },
+          { label: "Countries", value: stats.countries, icon: Star },
+          { label: "Days", value: stats.daysPlanned, icon: Calendar },
+        ].map((s) => (
+          <div key={s.label} className="rounded-2xl border border-slate-200 bg-white p-4 text-center shadow-sm">
+            <s.icon className="mx-auto h-5 w-5 text-indigo-600" />
+            <p className="mt-2 text-2xl font-bold text-slate-900">{s.value}</p>
+            <p className="text-xs text-slate-500">{s.label}</p>
+          </div>
         ))}
       </div>
 
-      <div className="mt-12 px-6 lg:px-12">
-        <h2 className="font-display mb-6 text-3xl font-semibold text-[#111111]">Travel Statistics</h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="tm-card p-5">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
-              <Plane className="size-5" />
-            </div>
-            <p className="mt-4 text-2xl font-bold text-[#111111]">12,450</p>
-            <p className="mt-1 text-sm font-medium text-[#6B7280]">KM Traveled</p>
+      {/* Trips */}
+      <section>
+        <h2 className="mb-4 text-lg font-semibold text-slate-900">My Trips</h2>
+        {isLoading ? (
+          <div className="grid gap-4 md:grid-cols-2">{[1,2].map((i) => <div key={i} className="h-40 animate-pulse rounded-2xl bg-slate-100" />)}</div>
+        ) : trips.length === 0 ? (
+          <div className="flex flex-col items-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 py-10 text-center">
+            <Plane className="h-8 w-8 text-slate-300" />
+            <p className="mt-2 text-sm text-slate-600">No trips yet</p>
+            <Link href="/planner" className="mt-3 rounded-xl bg-indigo-600 px-4 py-2 text-sm text-white hover:bg-indigo-500">Plan your first trip</Link>
           </div>
-
-          <div className="tm-card p-5">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
-              <Clock className="size-5" />
-            </div>
-            <p className="mt-4 text-2xl font-bold text-[#111111]">5.2 Days</p>
-            <p className="mt-1 text-sm font-medium text-[#6B7280]">Avg. Trip Length</p>
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2">
+            {trips.map((trip) => (
+              <Link key={trip.id} href={`/itinerary/${trip.id}/view`} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md">
+                <div className="relative h-32">
+                  <img src={trip.coverImage} alt={trip.destination} className="h-full w-full object-cover group-hover:scale-105 transition" />
+                  <span className={`absolute top-2 right-2 rounded-full px-2 py-0.5 text-[10px] font-medium ${trip.status === "active" ? "bg-emerald-500 text-white" : "bg-amber-400 text-amber-900"}`}>{trip.status}</span>
+                </div>
+                <div className="p-4">
+                  <h3 className="text-sm font-semibold text-slate-900">{trip.title}</h3>
+                  <p className="mt-0.5 flex items-center gap-1 text-xs text-slate-500"><MapPin className="h-3 w-3" />{trip.destination} · {trip.totalDays} days</p>
+                </div>
+              </Link>
+            ))}
           </div>
-
-          <div className="tm-card p-5">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-              <Globe2 className="size-5" />
-            </div>
-            <p className="mt-4 truncate text-xl font-bold text-[#111111]">Goa, India</p>
-            <p className="mt-1 text-sm font-medium text-[#6B7280]">Most Visited</p>
-          </div>
-
-          <div className="tm-card p-5">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-rose-50 text-rose-600">
-              <CreditCard className="size-5" />
-            </div>
-            <p className="mt-4 text-2xl font-bold text-[#111111]">INR 1.2L</p>
-            <p className="mt-1 text-sm font-medium text-[#6B7280]">Total Spent</p>
-          </div>
-        </div>
-      </div>
+        )}
+      </section>
     </div>
   );
 }

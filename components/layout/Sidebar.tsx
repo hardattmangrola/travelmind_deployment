@@ -6,6 +6,7 @@ import {
   HelpCircle,
   Heart,
   LayoutDashboard,
+  LogOut,
   Map,
   Plane,
   Search,
@@ -14,7 +15,8 @@ import {
   User,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { sampleTrips } from "@/lib/placeholder-data";
+import { useSession, signOut } from "@/lib/auth-client";
+import { useEffect, useState } from "react";
 import {
   Sidebar as ShadcnSidebar,
   SidebarContent,
@@ -33,10 +35,18 @@ const menuItems = [
   { label: "Plan a Trip", icon: Sparkles, href: "/planner", highlighted: true },
   { label: "Explore", icon: Search, href: "/search" },
   { label: "Wishlist", icon: Heart, href: "/wishlist" },
-  { label: "My Trips", icon: Map, href: "/planner" },
+  { label: "My Trips", icon: Map, href: "/profile" },
 ] as const;
 
 type Status = "draft" | "active" | "completed";
+
+interface SidebarTrip {
+  id: string;
+  title: string;
+  destination: string;
+  country: string;
+  status: string;
+}
 
 function getStatusDotColor(status: Status): string {
   switch (status) {
@@ -54,15 +64,51 @@ function getFlagEmoji(country: string): string {
   if (country === "India") return "🇮🇳";
   if (country === "Indonesia") return "🇮🇩";
   if (country === "France") return "🇫🇷";
+  if (country === "Japan") return "🇯🇵";
+  if (country === "Thailand") return "🇹🇭";
   return "🌍";
+}
+
+function getInitials(name: string): string {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
 }
 
 export function Sidebar() {
   const pathname = usePathname();
-  const recentTrips = sampleTrips.slice(0, 3);
+  const { data: session } = useSession();
+  const [recentTrips, setRecentTrips] = useState<SidebarTrip[]>([]);
 
-  const userName = "John Doe";
-  const userEmail = "john.doe@example.com";
+  const userName = session?.user?.name || "User";
+  const userEmail = session?.user?.email || "";
+
+  useEffect(() => {
+    // Fetch user's recent trips
+    fetch("/api/itinerary/user")
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setRecentTrips(data.slice(0, 3));
+        }
+      })
+      .catch(() => {
+        // Silently fail — sidebar still renders
+      });
+  }, []);
+
+  const handleSignOut = async () => {
+    await signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          window.location.href = "/signin";
+        },
+      },
+    });
+  };
 
   return (
     <ShadcnSidebar
@@ -124,31 +170,39 @@ export function Sidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="gap-2">
-              {recentTrips.map((trip) => (
-                <SidebarMenuItem key={trip.id}>
-                  <SidebarMenuButton
-                    asChild
-                    className="h-auto rounded-xl border border-[#E8E8E2] bg-[#F7F7F4] px-3 py-2 text-xs shadow-sm hover:border-[#D4D4CC] hover:bg-white"
-                  >
-                    <Link href={`/itinerary/${trip.id}/view`}>
-                      <span
-                        className={cn(
-                          "h-2.5 w-2.5 rounded-full",
-                          getStatusDotColor(trip.status as Status),
-                        )}
-                      />
-                      <span className="flex min-w-0 flex-col">
-                        <span className="max-w-[9rem] truncate text-[11px] font-medium text-slate-800">
-                          {trip.title}
-                        </span>
-                        <span className="text-[11px] text-slate-500">
-                          {trip.destination} {getFlagEmoji(trip.country)}
-                        </span>
-                      </span>
-                    </Link>
-                  </SidebarMenuButton>
+              {recentTrips.length === 0 ? (
+                <SidebarMenuItem>
+                  <div className="px-3 py-2 text-xs text-slate-400 italic">
+                    No trips yet — plan your first!
+                  </div>
                 </SidebarMenuItem>
-              ))}
+              ) : (
+                recentTrips.map((trip) => (
+                  <SidebarMenuItem key={trip.id}>
+                    <SidebarMenuButton
+                      asChild
+                      className="h-auto rounded-xl border border-[#E8E8E2] bg-[#F7F7F4] px-3 py-2 text-xs shadow-sm hover:border-[#D4D4CC] hover:bg-white"
+                    >
+                      <Link href={`/itinerary/${trip.id}/view`}>
+                        <span
+                          className={cn(
+                            "h-2.5 w-2.5 rounded-full",
+                            getStatusDotColor(trip.status as Status),
+                          )}
+                        />
+                        <span className="flex min-w-0 flex-col">
+                          <span className="max-w-[9rem] truncate text-[11px] font-medium text-slate-800">
+                            {trip.title}
+                          </span>
+                          <span className="text-[11px] text-slate-500">
+                            {trip.destination} {getFlagEmoji(trip.country)}
+                          </span>
+                        </span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -160,9 +214,14 @@ export function Sidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="gap-1">
               <SidebarMenuItem>
-                <SidebarMenuButton className="h-10 rounded-xl px-3 text-sm font-medium text-[#6B7280] hover:bg-[#F7F7F4] hover:text-[#111111]">
-                  <User className="h-4 w-4" />
-                  <span>Profile</span>
+                <SidebarMenuButton
+                  asChild
+                  className="h-10 rounded-xl px-3 text-sm font-medium text-[#6B7280] hover:bg-[#F7F7F4] hover:text-[#111111]"
+                >
+                  <Link href="/profile">
+                    <User className="h-4 w-4" />
+                    <span>Profile</span>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
@@ -177,6 +236,15 @@ export function Sidebar() {
                   <span>Help</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  onClick={handleSignOut}
+                  className="h-10 rounded-xl px-3 text-sm font-medium text-rose-500 hover:bg-rose-50 hover:text-rose-700"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>Sign Out</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -185,23 +253,24 @@ export function Sidebar() {
       <SidebarFooter className="px-4 pb-4 pt-2">
         <div className="space-y-3 rounded-2xl border border-[#E8E8E2] bg-[#F7F7F4] p-3 shadow-inner">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#4F46E5] text-xs font-semibold text-white">
-              JD
-            </div>
+            {session?.user?.image ? (
+              <img
+                src={session.user.image}
+                alt={userName}
+                className="h-9 w-9 rounded-full object-cover"
+              />
+            ) : (
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#4F46E5] text-xs font-semibold text-white">
+                {getInitials(userName)}
+              </div>
+            )}
             <div className="flex flex-1 flex-col">
               <span className="text-sm font-medium text-slate-900">{userName}</span>
               <span className="text-xs text-slate-500">{userEmail}</span>
             </div>
-            <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">
-              Free
-            </span>
           </div>
-          <button type="button" className="tm-btn-primary w-full px-3 py-2">
-            Upgrade to Pro
-          </button>
         </div>
       </SidebarFooter>
     </ShadcnSidebar>
   );
 }
-
